@@ -5,7 +5,14 @@ project(desafio2 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(desafio2 main.cpp)
+add_executable(desafio2 main.cpp
+
+
+    torneo.h torneo.cpp
+    grupo.h grupo.cpp
+    equipo.h equipo.cpp
+    jugador.h jugador.cpp
+    Partido.h partido.cpp)
 
 include(GNUInstallDirs)
 install(TARGETS desafio2
