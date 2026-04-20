@@ -52,12 +52,10 @@ void Jugador::setNumero(int numero){
     this->numero = numero;
 }
 
-//estadísticas
 void Jugador::actualizarEstadisticas(int goles, int minutos, int amarillas, int rojas, int faltas){
     estadisticas.actualizar(goles, amarillas, rojas, faltas, minutos);
 }
 
-//mostrar
 void Jugador::mostrarJugador(){
     cout << "Nombre: " << nombre << " " << apellido << endl;
     cout << "Numero: " << numero << endl;

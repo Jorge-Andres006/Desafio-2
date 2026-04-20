@@ -1,6 +1,6 @@
 #include "grupo.h"
 #include "equipo.h"
-
+#include <iostream>
 Grupo::Grupo(){
     letra = 'A';
     equipos = nullptr;
@@ -57,9 +57,19 @@ void Grupo::agregarEquipo(Equipo* equipo){
 }
 
 void Grupo::mostrarGrupo(){
+
+    cout << "----------------------" << endl;
+    cout << "Grupo " << letra << endl;
+    cout << "----------------------" << endl;
+
     for(int i = 0; i < cantidadEquipos; i++){
-        equipos[i]->mostrarEquipo();
+        cout << equipos[i]->getPais()
+        << " - "
+        << equipos[i]->getConfederacion()
+        << endl;
     }
+
+    cout << endl;
 }
 
 Grupo& Grupo::operator=(const Grupo& otro){

@@ -46,10 +46,10 @@ void EstadisticaEquipo::actualizar(int gf,int gc,int resultado){
 }
 
 void EstadisticaEquipo::mostrar(){
-    cout << "GF: " << golesFavor << " GC: " << golesContra << endl;
-    cout << "PG: " << partidosGanados
-         << " PE: " << partidosEmpatados
-         << " PP: " << partidosPerdidos << endl;
+    cout << "Goles a favor: " << golesFavor << " Goles en contra: " << golesContra << endl;
+    cout << "Partidos ganados: " << partidosGanados
+         << " Partidos empatados: " << partidosEmpatados
+         << " Partidos perdidos: " << partidosPerdidos << endl;
 }
 
 EstadisticaEquipo& EstadisticaEquipo::operator=(const EstadisticaEquipo& otro){

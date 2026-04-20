@@ -1,52 +1,53 @@
 #ifndef TORNEO_H
 #define TORNEO_H
+
 #include <string>
-using namespace std;
+
 class Equipo;
 class Grupo;
 class Partido;
 
 class Torneo{
 private:
-    string nombre;
-    string fechaInicio;
+    std::string nombre;
+    std::string fechaInicio;
     int anio;
 
-    Equipo* equipos;
+    Equipo** equipos;
     int cantidadEquipos;
 
     Grupo* grupos;
     int cantidadGrupos;
 
-    Partido* partidos;
-    int cantidadPartidos;
+    //bombos
+    Equipo** bombo1;
+    Equipo** bombo2;
+    Equipo** bombo3;
+    Equipo** bombo4;
+
+    //metodos internos
+    void ordenarPorRanking();
+    void conformarBombos();
+    bool sorteo();
+    int sortearDeBombo(Equipo** bombo, bool* usado, int tamano, Grupo& grupo);
+    bool esValido(Grupo& grupo, Equipo* equipo);
 
 public:
-    //constructores
     Torneo();
-    Torneo(const Torneo& copia);
-
-    //destructor
+    Torneo(const Torneo& otro);
     ~Torneo();
 
-    //getters
-    string getNombre();
-    int getAnio();
-    string getFechaInicio();
-
-    //Setters
-    void setNombre(const string nombre);
-    void setAnio(int anio);
-    void setFechaInicio(const string fechaInicio);
-
-    //metodos principales,
-    void simularToneo();
-    void generarEstadisticas();
-
-    //despliegue
-    void mostrarTorneo();
-    //sobrecarga
     Torneo& operator=(const Torneo& otro);
+
+    void setEquipos(Equipo** equipos, int cantidad);
+    void inicializarGrupos(int cantidad);
+
+    void simularTorneo();
+    void mostrarGrupos();
+    void mostrarBombos();
+
+    Grupo* getGrupos();
+    int getCantidadGrupos();
 };
 
-#endif // TORNEO_H
+#endif

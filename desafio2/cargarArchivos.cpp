@@ -19,7 +19,7 @@ string limpiarTexto(const string& texto){
     string resultado = "";
 
     for(int i = 0; i < texto.size(); i++){
-        if(texto[i]!='\r' && texto[i]!=' '){
+        if(texto[i]!='\r'){
             resultado += texto[i];
         }
     }

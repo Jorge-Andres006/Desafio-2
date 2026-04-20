@@ -76,6 +76,7 @@ void Equipo::cargarEstadisticas(int gf,int gc,int pg,int pe,int pp){
 }
 
 void Equipo::mostrarEquipo(){
+    cout << "Direccion en memoria: " << this << endl;
     cout << "Pais: " << pais << endl;
     cout << "Ranking: " << ranking << endl;
     cout << "Confederacion: " << confederacion << endl;

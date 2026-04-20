@@ -1,15 +1,29 @@
-#include <iostream>
+#include "torneo.h"
+#include "equipo.h"
 #include "cargarArchivos.h"
+
+
 using namespace std;
 
 int main(){
 
-    int cantidadEquipos;
-    Equipo* equipos = cargarEquipos("selecciones_clasificadas_mundial.csv", cantidadEquipos);
+    int cantidad;
+    Equipo* equiposPlano = cargarEquipos("selecciones_clasificadas_mundial.csv", cantidad);
 
-    cout << equipos[5].getDirectorTecnico() << endl;
+    Equipo** equipos = new Equipo*[cantidad];
 
-    delete[] equipos;
+    for(int i = 0; i < cantidad; i++){
+        equipos[i] = &equiposPlano[i];
+    }
+
+    Torneo torneo;
+
+    torneo.setEquipos(equipos, cantidad);
+    torneo.inicializarGrupos(12);
+
+    torneo.simularTorneo();
+    torneo.mostrarGrupos();
+    torneo.mostrarBombos();
 
     return 0;
 }
