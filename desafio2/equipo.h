@@ -1,12 +1,15 @@
 #ifndef EQUIPO_H
 #define EQUIPO_H
+#include <string>
+using namespace std;
 class Jugador;
 
 class Equipo{
 private:
-    char* pais;
-    char* confederacion;
-    char* directorTecnico;
+    string pais;
+    string confederacion;
+    string federacion;
+    string directorTecnico;
 
     int ranking;
     int puntos;
@@ -32,16 +35,18 @@ public:
     ~Equipo();
 
     //getters
-    char* getPais();
+    string getPais();
     int getRanking();
     int getPuntos();
-    char* getConfederacion();
+    string getConfederacion();
+    string getDirectorTecnico();
 
     //setters
-    void setPais(const char* pais);
-    void setConfederacion(const char* confederacion);
-    void setDirectorTecnico(const char* dt);
+    void setPais(const string& pais);
+    void setConfederacion(const string& confederacion);
+    void setDirectorTecnico(const string& dt);
     void setRanking(int ranking);
+    void setFederacion(const string& federacion);
 
     //metodos principales
     void agregarJugador(const Jugador& jugador);

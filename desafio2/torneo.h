@@ -1,13 +1,15 @@
 #ifndef TORNEO_H
 #define TORNEO_H
+#include <string>
+using namespace std;
 class Equipo;
 class Grupo;
 class Partido;
 
 class Torneo{
 private:
-    char* nombre;
-    char* fechaInicio;
+    string nombre;
+    string fechaInicio;
     int anio;
 
     Equipo* equipos;
@@ -28,14 +30,14 @@ public:
     ~Torneo();
 
     //getters
-    char* getNombre();
+    string getNombre();
     int getAnio();
-    char* getFechaInicio();
+    string getFechaInicio();
 
     //Setters
-    void setNombre(const char* nombre);
+    void setNombre(const string nombre);
     void setAnio(int anio);
-    void setFechaInicio(const char* fechaInicio);
+    void setFechaInicio(const string fechaInicio);
 
     //metodos principales,
     void simularToneo();

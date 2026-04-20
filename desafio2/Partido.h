@@ -1,14 +1,16 @@
 #ifndef PARTIDO_H
 #define PARTIDO_H
+#include <string>
+using namespace std;
 class Equipo;
 class Jugador;
 class Partido{
 private:
-    char fecha[11];
-    char hora[6];
+    string fecha;
+    string hora;
 
-    char sede[12];
-    char arbitros[3][15];
+    string sede;
+    string arbitros[3];
 
     Equipo* equipo1;
     Equipo* equipo2;
@@ -39,13 +41,13 @@ public:
     //getters
     Equipo* getEquipo1();
     Equipo* getEquipo2();
-    char* getFecha();
-    char* getHora();
-    char* getSede();
-    char* getArbitro(int i);
+    string getFecha();
+    string getHora();
+    string getSede();
+    string getArbitro(int i);
 
     //setters
-    void setFecha(const char* fecha);
+    void setFecha(const string fecha);
     void setEquipos(Equipo* equipo1, Equipo* equipo2);
 
     //metodos principales

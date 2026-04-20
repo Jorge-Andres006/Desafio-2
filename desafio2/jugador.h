@@ -1,10 +1,11 @@
 #ifndef JUGADOR_H
 #define JUGADOR_H
-
+#include <string>
+using namespace std;
 class Jugador{
 private:
-    char* nombre;
-    char* apellido;
+    string nombre;
+    string apellido;
     int numero;
 
     int partidosJugados;
@@ -23,14 +24,14 @@ public:
     ~Jugador();
 
     //getters
-    char* getNombre();
-    char* getApellido();
+    string getNombre();
+    string getApellido();
     int getNumero();
     int getGoles();
 
     //setters
-    void setNombre(const char* nombre);
-    void setApellido(const char* apellido);
+    void setNombre(const string nombre);
+    void setApellido(const string apellido);
     void setNumero(int numero);
 
     //metodos principales
