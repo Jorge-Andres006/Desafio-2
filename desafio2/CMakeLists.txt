@@ -12,9 +12,13 @@ add_executable(desafio2 main.cpp
     grupo.h grupo.cpp
     equipo.h equipo.cpp
     jugador.h jugador.cpp
-    Partido.h partido.cpp
+    partido.h partido.cpp
     cargarArchivos.h
-    cargarArchivos.cpp)
+    cargarArchivos.cpp
+    eliminatoria.h eliminatoria.cpp
+    estadisticajugador.h estadisticajugador.cpp
+    estadisticaequipo.h estadisticaequipo.cpp
+    tablagrupo.h tablagrupo.cpp)
 
 include(GNUInstallDirs)
 install(TARGETS desafio2

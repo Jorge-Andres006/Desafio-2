@@ -1,20 +1,18 @@
 #ifndef JUGADOR_H
 #define JUGADOR_H
+
 #include <string>
+#include "estadisticajugador.h"
 using namespace std;
+
 class Jugador{
 private:
     string nombre;
     string apellido;
     int numero;
 
-    int partidosJugados;
-    int goles;
-    int minutosJugados;
-    int asistencias;
-    int tarjetasAmarillas;
-    int tarjetasRojas;
-    int faltas;
+    EstadisticaJugador estadisticas;
+
 public:
     //constructores
     Jugador();
@@ -44,4 +42,4 @@ public:
     Jugador& operator=(const Jugador& otro);
 };
 
-#endif // JUGADOR_H
+#endif

@@ -1,4 +1,5 @@
-#include "Jugador.h"
+#include "jugador.h"
+#include "estadisticajugador.h"
 #include <iostream>
 using namespace std;
 
@@ -7,7 +8,7 @@ Jugador::Jugador(){
     nombre = "";
     apellido = "";
     numero = 0;
-    goles = 0;
+    estadisticas = EstadisticaJugador();
 }
 
 //constructor copia
@@ -15,13 +16,11 @@ Jugador::Jugador(const Jugador& copia){
     nombre = copia.nombre;
     apellido = copia.apellido;
     numero = copia.numero;
-    goles = copia.goles;
+    estadisticas = copia.estadisticas;
 }
 
 //destructor
-Jugador::~Jugador(){
-
-}
+Jugador::~Jugador(){}
 
 //getters
 string Jugador::getNombre(){
@@ -37,7 +36,7 @@ int Jugador::getNumero(){
 }
 
 int Jugador::getGoles(){
-    return goles;
+    return estadisticas.getGoles();
 }
 
 //setters
@@ -55,14 +54,14 @@ void Jugador::setNumero(int numero){
 
 //estadísticas
 void Jugador::actualizarEstadisticas(int goles, int minutos, int amarillas, int rojas, int faltas){
-    this->goles = this->goles + goles;
+    estadisticas.actualizar(goles, amarillas, rojas, faltas, minutos);
 }
 
 //mostrar
 void Jugador::mostrarJugador(){
     cout << "Nombre: " << nombre << " " << apellido << endl;
     cout << "Numero: " << numero << endl;
-    cout << "Goles: " << goles << endl;
+    estadisticas.mostrar();
 }
 
 Jugador& Jugador::operator=(const Jugador& otro){
@@ -70,7 +69,7 @@ Jugador& Jugador::operator=(const Jugador& otro){
         nombre = otro.nombre;
         apellido = otro.apellido;
         numero = otro.numero;
-        goles = otro.goles;
+        estadisticas = otro.estadisticas;
     }
     return *this;
 }

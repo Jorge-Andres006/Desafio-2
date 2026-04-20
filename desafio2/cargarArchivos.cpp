@@ -98,10 +98,12 @@ Equipo* cargarEquipos(const string nombreArchivo, int& cantidadEquipos){
             equipos[indiceEquipo].setFederacion(nombreFederacion);
             equipos[indiceEquipo].setRanking(rankingFifa);
 
-            equipos[indiceEquipo].actualizarEstadisticas(
+            equipos[indiceEquipo].cargarEstadisticas(
                 golesFavor,
                 golesContra,
-                0,0,0,0
+                partidosGanados,
+                partidosEmpatados,
+                partidosPerdidos
                 );
 
             indiceEquipo++;
