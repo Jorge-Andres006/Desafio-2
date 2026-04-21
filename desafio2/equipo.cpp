@@ -38,17 +38,31 @@ Equipo::~Equipo(){
     delete[] jugadores;
 }
 
+//getters
 string Equipo::getPais(){ return pais; }
 int Equipo::getRanking(){ return ranking; }
 string Equipo::getDirectorTecnico(){ return directorTecnico; }
 string Equipo::getConfederacion(){ return confederacion; }
 
+Jugador* Equipo::getJugador(int indice){
+    if(indice>=0 && indice<cantidadJugadores){
+        return &jugadores[indice];
+    }
+    return nullptr;
+}
+
+int Equipo::getCantidadJugadores(){
+    return cantidadJugadores;
+}
+
+//setters
 void Equipo::setPais(const string& pais){ this->pais=pais; }
 void Equipo::setConfederacion(const string& confederacion){ this->confederacion=confederacion; }
 void Equipo::setDirectorTecnico(const string& dt){ this->directorTecnico=dt; }
 void Equipo::setRanking(int ranking){ this->ranking=ranking; }
 void Equipo::setFederacion(const string& federacion){ this->federacion=federacion; }
 
+//metodos
 void Equipo::agregarJugador(const Jugador& jugador){
     Jugador* nuevo=new Jugador[cantidadJugadores+1];
 
@@ -63,16 +77,16 @@ void Equipo::agregarJugador(const Jugador& jugador){
     cantidadJugadores++;
 }
 
-void Equipo::actualizarEstadisticas(int gf,int gc,int resultado){
-    estadisticas.actualizar(gf,gc,resultado);
+void Equipo::actualizarEstadisticas(int golesFavor,int golesContra,int resultado){
+    estadisticas.actualizar(golesFavor,golesContra,resultado);
 }
 
-void Equipo::cargarEstadisticas(int gf,int gc,int pg,int pe,int pp){
-    estadisticas.setGolesFavor(gf);
-    estadisticas.setGolesContra(gc);
-    estadisticas.setPartidosGanados(pg);
-    estadisticas.setPartidosEmpatados(pe);
-    estadisticas.setPartidosPerdidos(pp);
+void Equipo::cargarEstadisticas(int golesFavor,int golesContra,int partidosGanados,int partidosEmpatados,int partidosPerdidos){
+    estadisticas.setGolesFavor(golesFavor);
+    estadisticas.setGolesContra(golesContra);
+    estadisticas.setPartidosGanados(partidosGanados);
+    estadisticas.setPartidosEmpatados(partidosEmpatados);
+    estadisticas.setPartidosPerdidos(partidosPerdidos);
 }
 
 void Equipo::mostrarEquipo(){

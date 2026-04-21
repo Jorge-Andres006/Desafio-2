@@ -1,9 +1,12 @@
 #ifndef PARTIDO_H
 #define PARTIDO_H
+
 #include <string>
 using namespace std;
+
 class Equipo;
 class Jugador;
+
 class Partido{
 private:
     string fecha;
@@ -60,6 +63,12 @@ public:
 
     //sobrecarga
     Partido& operator=(const Partido& otro);
+
+private:
+    //metodos auxiliares
+    float calcularLambda(float golesFavor,float golesContra);
+    int generarPoisson(float lambda);
+    void simularEventos(Jugador** jugadores,int& goles,int& amarillas,int& rojas,int& faltas);
 };
 
-#endif // PARTIDO_H
+#endif

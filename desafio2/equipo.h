@@ -26,23 +26,25 @@ public:
     Equipo(const Equipo& copia);
     ~Equipo();
 
+    //getters
     string getPais();
     int getRanking();
     string getConfederacion();
     string getDirectorTecnico();
+    Jugador* getJugador(int indice);
+    int getCantidadJugadores();
 
+    //setters
     void setPais(const string& pais);
     void setConfederacion(const string& confederacion);
     void setDirectorTecnico(const string& dt);
     void setRanking(int ranking);
     void setFederacion(const string& federacion);
 
+    //metodos
     void agregarJugador(const Jugador& jugador);
-
-    void actualizarEstadisticas(int gf,int gc,int resultado);
-
-
-    void cargarEstadisticas(int gf,int gc,int pg,int pe,int pp);
+    void actualizarEstadisticas(int golesFavor,int golesContra,int resultado);
+    void cargarEstadisticas(int golesFavor,int golesContra,int partidosGanados,int partidosEmpatados,int partidosPerdidos);
 
     void mostrarEquipo();
 
