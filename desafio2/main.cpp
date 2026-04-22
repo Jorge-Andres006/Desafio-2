@@ -25,8 +25,8 @@ int main(){
     torneo.inicializarGrupos(12);
     torneo.realizarSorteo();
     torneo.mostrarGrupos();
-
     torneo.simularTorneo();
+    torneo.mostrarTablasGrupos();
 
     guardarJugadoresCSV("jugadores.csv", equiposPlano, cantidad);
     copiarArchivoCSV("selecciones_clasificadas_mundial.csv", "post_mundial.csv");

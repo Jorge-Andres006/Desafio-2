@@ -45,6 +45,7 @@ public:
     void simularTorneo();
 
     void mostrarGrupos();
+    void mostrarTablasGrupos();
     void mostrarBombos();
 
     Grupo* getGrupos();

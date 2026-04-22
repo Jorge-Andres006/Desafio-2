@@ -38,7 +38,29 @@ int Jugador::getNumero(){
 int Jugador::getGoles(){
     return estadisticas.getGoles();
 }
+int Jugador::getMinutos(){
+    return estadisticas.getMinutosJugados();
+}
 
+int Jugador::getAmarillas(){
+    return estadisticas.getTarjetasAmarillas();
+}
+
+int Jugador::getRojas(){
+    return estadisticas.getTarjetasRojas();
+}
+
+int Jugador::getFaltas(){
+    return estadisticas.getFaltas();
+}
+
+int Jugador::getAsistencias(){
+    return estadisticas.getAsistencias();
+}
+
+int Jugador::getPartidos(){
+    return estadisticas.getPartidosJugados();
+}
 //setters
 void Jugador::setNombre(const string nombre){
     this->nombre = nombre;
@@ -51,9 +73,11 @@ void Jugador::setApellido(const string apellido){
 void Jugador::setNumero(int numero){
     this->numero = numero;
 }
-
+void Jugador::sumarPartido(){
+    estadisticas.sumarPartido();
+}
 void Jugador::actualizarEstadisticas(int goles, int minutos, int amarillas, int rojas, int faltas){
-    estadisticas.actualizar(goles, amarillas, rojas, faltas, minutos);
+    estadisticas.actualizar(goles, minutos, amarillas, rojas, faltas);
 }
 
 void Jugador::mostrarJugador(){

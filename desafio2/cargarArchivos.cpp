@@ -74,12 +74,12 @@ void guardarJugadoresCSV(const string& nombreArchivo, Equipo* equipos, int canti
                     << jugador->getApellido() << ";"
                     << jugador->getNumero() << ";"
                     << jugador->getGoles() << ";"
-                    << 0 << ";"
-                    << 0 << ";"
-                    << 0 << ";"
-                    << 0 << ";"
-                    << 0 << ";"
-                    << 0
+                    << jugador->getMinutos() << ";"
+                    << jugador->getAmarillas() << ";"
+                    << jugador->getRojas() << ";"
+                    << jugador->getFaltas() << ";"
+                    << jugador->getAsistencias() << ";"
+                    << jugador->getPartidos()
                     << "\n";
         }
     }

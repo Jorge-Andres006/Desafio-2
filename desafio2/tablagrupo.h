@@ -6,8 +6,14 @@ class Grupo;
 
 class TablaGrupo{
 private:
+    Grupo* grupo;
     Equipo** equipos;
     int* puntos;
+    int* partidosJugados;
+    int* partidosGanados;
+    int* partidosEmpatados;
+    int* partidosPerdidos;
+    int* diferenciaGol;
     int cantidad;
 
 public:

@@ -40,15 +40,16 @@ void EstadisticaJugador::setTarjetasAmarillas(int ta){ tarjetasAmarillas = ta; }
 void EstadisticaJugador::setTarjetasRojas(int tr){ tarjetasRojas = tr; }
 void EstadisticaJugador::setFaltas(int f){ faltas = f; }
 
-void EstadisticaJugador::actualizar(int goles,int amarillas,int rojas,int faltas,int minutos){
+void EstadisticaJugador::actualizar(int goles, int minutos, int amarillas, int rojas, int faltas){
     this->goles += goles;
+    minutosJugados += minutos;
     tarjetasAmarillas += amarillas;
     tarjetasRojas += rojas;
     this->faltas += faltas;
-    minutosJugados += minutos;
+}
+void EstadisticaJugador::sumarPartido(){
     partidosJugados++;
 }
-
 void EstadisticaJugador::mostrar(){
     cout << "Goles: " << goles << " Minutos: " << minutosJugados << endl;
 }

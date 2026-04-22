@@ -26,6 +26,13 @@ public:
     string getApellido();
     int getNumero();
     int getGoles();
+    int getMinutos();
+    int getAmarillas();
+    int getRojas();
+    int getFaltas();
+    int getAsistencias();
+    int getPartidos();
+
 
     //setters
     void setNombre(const string nombre);
@@ -34,7 +41,7 @@ public:
 
     //metodos principales
     void actualizarEstadisticas(int goles, int minutos, int amarillas, int rojas, int faltas);
-
+    void sumarPartido();
     //despliegue
     void mostrarJugador();
 

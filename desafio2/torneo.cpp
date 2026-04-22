@@ -2,6 +2,7 @@
 #include "equipo.h"
 #include "grupo.h"
 #include "partido.h"
+#include "tablagrupo.h"
 #include <iostream>
 #include <random>
 
@@ -141,7 +142,10 @@ int Torneo::sortearDeBombo(Equipo** bombo, bool* usado, int tamano, Grupo& grupo
     return 0;
 }
 
-
+void Torneo::realizarSorteo(){
+    conformarBombos();
+    while(!sorteo()){}
+}
 bool Torneo::sorteo(){
 
     bool usado1[12] = {false};
@@ -255,9 +259,20 @@ void Torneo::asignarFechasGrupos(){
         }
     }
 }
-void Torneo::realizarSorteo(){
-    conformarBombos();
-    while(!sorteo()){}
+void Torneo::mostrarTablasGrupos(){
+
+    for(int i = 0; i < cantidadGrupos; i++){
+
+        cout << "\n======================" << endl;
+        cout << "GRUPO " << char('A' + i) << endl;
+        cout << "======================" << endl;
+
+        TablaGrupo tabla(grupos[i]);
+
+        tabla.calcularPuntos();
+        tabla.ordenarTabla();
+        tabla.mostrarTabla();
+    }
 }
 void Torneo::simularTorneo(){
 

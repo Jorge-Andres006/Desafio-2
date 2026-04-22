@@ -38,6 +38,8 @@ Equipo* Partido::getEquipo2(){ return equipo2; }
 string Partido::getFecha(){ return fecha; }
 string Partido::getHora(){ return hora; }
 string Partido::getSede(){ return sede; }
+int Partido::getGolesEquipo1(){return golesEquipo1;}
+int Partido::getGolesEquipo2(){return golesEquipo2;}
 
 string Partido::getArbitro(int i){
     if(i>=0 && i<3) return arbitros[i];
@@ -158,6 +160,21 @@ void Partido::simularEventos(Jugador** jugadores, int golesEquipo, int* goleador
         }
     }
 }
+void Partido::actualizarEquipos(){
+
+    int res1, res2;
+
+    if(golesEquipo1 > golesEquipo2){
+        res1 = 1; res2 = -1;
+    }else if(golesEquipo1 < golesEquipo2){
+        res1 = -1; res2 = 1;
+    }else{
+        res1 = 0; res2 = 0;
+    }
+
+    equipo1->actualizarEstadisticas(golesEquipo1, golesEquipo2, res1);
+    equipo2->actualizarEstadisticas(golesEquipo2, golesEquipo1, res2);
+}
 void Partido::simularPartido(){
 
     convocarJugadores();
@@ -184,6 +201,10 @@ void Partido::simularPartido(){
     calcularPosesion();
 
     actualizarEquipos();
+    for(int i = 0; i < 11; i++){
+        convocadosEquipo1[i]->sumarPartido();
+        convocadosEquipo2[i]->sumarPartido();
+    }
 }
 void Partido::mostrarPartido(){
 
@@ -216,19 +237,4 @@ void Partido::mostrarPartido(){
     cout << endl << endl;
 }
 
-void Partido::actualizarEquipos(){
-
-    int res1, res2;
-
-    if(golesEquipo1 > golesEquipo2){
-        res1 = 1; res2 = -1;
-    }else if(golesEquipo1 < golesEquipo2){
-        res1 = -1; res2 = 1;
-    }else{
-        res1 = 0; res2 = 0;
-    }
-
-    equipo1->actualizarEstadisticas(golesEquipo1, golesEquipo2, res1);
-    equipo2->actualizarEstadisticas(golesEquipo2, golesEquipo1, res2);
-}
 

@@ -32,8 +32,8 @@ public:
     void setTarjetasRojas(int tr);
     void setFaltas(int f);
 
-    void actualizar(int goles,int amarillas,int rojas,int faltas,int minutos);
-
+    void actualizar(int goles, int minutos, int amarillas, int rojas, int faltas);
+    void sumarPartido();
     void mostrar();
 
     EstadisticaJugador& operator=(const EstadisticaJugador& otro);
