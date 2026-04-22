@@ -20,54 +20,54 @@ private:
 
     int golesEquipo1;
     int golesEquipo2;
+
     float posesionEquipo1;
     float posesionEquipo2;
-    int faltasEquipo1;
-    int faltasEquipo2;
-    int amarillasEquipo1;
-    int amarillasEquipo2;
-    int rojasEquipo1;
-    int rojasEquipo2;
 
     Jugador** convocadosEquipo1;
     Jugador** convocadosEquipo2;
     int cantidadConvocados;
 
+    int goleadoresEquipo1[20];
+    int goleadoresEquipo2[20];
+
+    int cantGoleadores1;
+    int cantGoleadores2;
+
+    float calcularLambda(float gf, float gc);
+    int generarPoisson(float lambda);
+
+    void convocarJugadores();
+    void simularEventos(Jugador** jugadores, int golesEquipo, int* goleadores, int& cantGoleadores);
+    void calcularPosesion();
+    void actualizarEquipos();
+
+
+
 public:
-    //constructores
     Partido();
     Partido(const Partido& copia);
-
-    //destructor
     ~Partido();
 
-    //getters
     Equipo* getEquipo1();
     Equipo* getEquipo2();
     string getFecha();
     string getHora();
     string getSede();
     string getArbitro(int i);
+    int getGolesEquipo1();
+    int getGolesEquipo2();
 
-    //setters
-    void setFecha(const string fecha);
+    void setFecha(const string& fecha);
+    void setHora(const string& hora);
+    void setSede(const string& sede);
+    void setArbitros(const string arbitros[3]);
     void setEquipos(Equipo* equipo1, Equipo* equipo2);
 
-    //metodos principales
-    void convocarJugadores();
     void simularPartido();
-    void actualizarEquipos();
-
-    //despliegue
     void mostrarPartido();
 
-    //sobrecarga
     Partido& operator=(const Partido& otro);
-
-private:
-    float calcularLambda(float golesFavor,float golesContra);
-    int generarPoisson(float lambda);
-    void simularEventos(Jugador** jugadores,int& goles,int& amarillas,int& rojas,int& faltas);
 };
 
 #endif

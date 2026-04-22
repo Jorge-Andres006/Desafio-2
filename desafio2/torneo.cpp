@@ -1,6 +1,7 @@
 #include "torneo.h"
 #include "equipo.h"
 #include "grupo.h"
+#include "partido.h"
 #include <iostream>
 #include <random>
 
@@ -163,21 +164,123 @@ bool Torneo::sorteo(){
 
     return true;
 }
-void Torneo::simularTorneo(){
-
-    conformarBombos();
-
-    while(!sorteo()){
-
-    }
-
-    cout << "Sorteo completado!" << endl;
-}
-
-
 void Torneo::mostrarGrupos(){
     for(int i = 0; i < cantidadGrupos; i++){
         grupos[i].mostrarGrupo();
+    }
+}
+void Torneo::asignarFechasGrupos(){
+
+    int partidosPorDia[19] = {0};
+    int ultimoDia[48];
+
+    for(int i = 0; i < 48; i++) ultimoDia[i] = -10;
+
+    for(int g = 0; g < cantidadGrupos; g++){
+
+        Partido* partidos = grupos[g].getPartidos();
+        int cantidad = grupos[g].getCantidadPartidos();
+
+        for(int i = 0; i < cantidad; i++){
+
+            Equipo* e1 = partidos[i].getEquipo1();
+            Equipo* e2 = partidos[i].getEquipo2();
+
+            int id1 = -1, id2 = -1;
+
+            for(int k = 0; k < cantidadEquipos; k++){
+                if(equipos[k] == e1) id1 = k;
+                if(equipos[k] == e2) id2 = k;
+            }
+
+            bool asignado = false;
+
+            for(int d = 0; d < 19; d++){
+
+                if(partidosPorDia[d] >= 4) continue;
+                if(d - ultimoDia[id1] < 3) continue;
+                if(d - ultimoDia[id2] < 3) continue;
+
+                int dia = 20 + d;
+
+                string fecha;
+
+                if(dia <= 30){
+                    if(dia < 10) fecha = "2026-06-0" + to_string(dia);
+                    else fecha = "2026-06-" + to_string(dia);
+                }else{
+                    int dj = dia - 30;
+                    if(dj < 10) fecha = "2026-07-0" + to_string(dj);
+                    else fecha = "2026-07-" + to_string(dj);
+                }
+
+                partidos[i].setFecha(fecha);
+
+                partidosPorDia[d]++;
+                ultimoDia[id1] = d;
+                ultimoDia[id2] = d;
+
+                asignado = true;
+                break;
+            }
+
+            if(!asignado){
+
+                for(int d = 0; d < 19; d++){
+
+                    if(partidosPorDia[d] >= 4) continue;
+
+                    int dia = 20 + d;
+
+                    string fecha;
+
+                    if(dia <= 30){
+                        if(dia < 10) fecha = "2026-06-0" + to_string(dia);
+                        else fecha = "2026-06-" + to_string(dia);
+                    }else{
+                        int dj = dia - 30;
+                        if(dj < 10) fecha = "2026-07-0" + to_string(dj);
+                        else fecha = "2026-07-" + to_string(dj);
+                    }
+
+                    partidos[i].setFecha(fecha);
+
+                    partidosPorDia[d]++;
+                    ultimoDia[id1] = d;
+                    ultimoDia[id2] = d;
+
+                    break;
+                }
+            }
+        }
+    }
+}
+void Torneo::realizarSorteo(){
+    conformarBombos();
+    while(!sorteo()){}
+}
+void Torneo::simularTorneo(){
+
+    cout << "Inicio simulacion" << endl;
+
+    for(int i = 0; i < cantidadGrupos; i++){
+        grupos[i].generarPartidos();
+    }
+
+    asignarFechasGrupos();
+
+    for(int g = 0; g < cantidadGrupos; g++){
+
+        cout << "Partidos grupo " << grupos[g].getLetra() << endl;
+
+        Partido* partidos = grupos[g].getPartidos();
+        int cant = grupos[g].getCantidadPartidos();
+
+        for(int i = 0; i < cant; i++){
+            partidos[i].simularPartido();
+            partidos[i].mostrarPartido();
+        }
+        cout<<endl;
     }
 }
 void Torneo::mostrarBombos(){

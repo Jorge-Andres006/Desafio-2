@@ -3,6 +3,7 @@
 #include "InicializarDatos.h"
 #include "cargarArchivos.h"
 
+
 using namespace std;
 
 int main(){
@@ -16,17 +17,18 @@ int main(){
         equipos[i] = &equiposPlano[i];
     }
 
+    inicializarJugadoresEquipos(equiposPlano, cantidad);
+
     Torneo torneo;
 
     torneo.setEquipos(equipos, cantidad);
     torneo.inicializarGrupos(12);
+    torneo.realizarSorteo();
+    torneo.mostrarGrupos();
 
     torneo.simularTorneo();
-    torneo.mostrarGrupos();
-    torneo.mostrarBombos();
-    inicializarJugadoresEquipos(equiposPlano,cantidad);
-    imprimirJugadoresEquipos(equiposPlano, cantidad);
-    guardarJugadoresCSV("jugadores.csv", equiposPlano,cantidad);
+
+    guardarJugadoresCSV("jugadores.csv", equiposPlano, cantidad);
     copiarArchivoCSV("selecciones_clasificadas_mundial.csv", "post_mundial.csv");
 
     return 0;

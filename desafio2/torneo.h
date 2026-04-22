@@ -2,15 +2,15 @@
 #define TORNEO_H
 
 #include <string>
-
+using namespace std;
 class Equipo;
 class Grupo;
 class Partido;
 
 class Torneo{
 private:
-    std::string nombre;
-    std::string fechaInicio;
+    string nombre;
+    string fechaInicio;
     int anio;
 
     Equipo** equipos;
@@ -19,18 +19,17 @@ private:
     Grupo* grupos;
     int cantidadGrupos;
 
-    //bombos
     Equipo** bombo1;
     Equipo** bombo2;
     Equipo** bombo3;
     Equipo** bombo4;
 
-    //metodos internos
     void ordenarPorRanking();
     void conformarBombos();
     bool sorteo();
     int sortearDeBombo(Equipo** bombo, bool* usado, int tamano, Grupo& grupo);
     bool esValido(Grupo& grupo, Equipo* equipo);
+    void asignarFechasGrupos();
 
 public:
     Torneo();
@@ -42,7 +41,9 @@ public:
     void setEquipos(Equipo** equipos, int cantidad);
     void inicializarGrupos(int cantidad);
 
+    void realizarSorteo();
     void simularTorneo();
+
     void mostrarGrupos();
     void mostrarBombos();
 

@@ -1,10 +1,13 @@
 #include "grupo.h"
+#include "partido.h"
 #include "equipo.h"
 #include <iostream>
 Grupo::Grupo(){
     letra = 'A';
     equipos = nullptr;
     cantidadEquipos = 0;
+    partidos = nullptr;
+    cantidadPartidos = 0;
 }
 
 Grupo::Grupo(const Grupo& copia){
@@ -24,6 +27,7 @@ Grupo::Grupo(const Grupo& copia){
 
 Grupo::~Grupo(){
     delete[] equipos;
+    delete[] partidos;
 }
 
 char Grupo::getLetra(){
@@ -37,7 +41,13 @@ int Grupo::getCantidadEquipos(){
 Equipo** Grupo::getEquipos(){
     return equipos;
 }
+Partido* Grupo::getPartidos(){
+    return partidos;
+}
 
+int Grupo::getCantidadPartidos(){
+    return cantidadPartidos;
+}
 void Grupo::setLetra(char letra){
     this->letra = letra;
 }
@@ -71,7 +81,26 @@ void Grupo::mostrarGrupo(){
 
     cout << endl;
 }
+void Grupo::generarPartidos(){
 
+    if(cantidadEquipos != 4) return;
+
+    cantidadPartidos = 6;
+    partidos = new Partido[cantidadPartidos];
+
+    int cruces[6][2] = {
+        {0,1},{0,2},{0,3},
+        {1,2},{1,3},{2,3}
+    };
+    string arbitros[3] = {"codArbitro1","codArbitro2","codArbitro3"};
+    for(int i = 0; i < 6; i++){
+
+        partidos[i].setEquipos(equipos[cruces[i][0]], equipos[cruces[i][1]]);
+        partidos[i].setHora("00:00");
+        partidos[i].setSede("nombreSede");
+        partidos[i].setArbitros(arbitros);
+    }
+}
 Grupo& Grupo::operator=(const Grupo& otro){
     if(this != &otro){
         letra = otro.letra;

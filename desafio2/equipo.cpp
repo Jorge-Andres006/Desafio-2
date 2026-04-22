@@ -97,7 +97,27 @@ void Equipo::mostrarEquipo(){
     cout << "Director Tecnico: " << directorTecnico << endl;
     estadisticas.mostrar();
 }
+float Equipo::getPromedioGolesFavor(){
 
+    int partidosJugados = estadisticas.getPartidosGanados()
+    + estadisticas.getPartidosEmpatados()
+        + estadisticas.getPartidosPerdidos();
+
+    if(partidosJugados == 0) return 1.0;
+
+    return (float)estadisticas.getGolesFavor() / partidosJugados;
+}
+
+float Equipo::getPromedioGolesContra(){
+
+    int partidosJugados = estadisticas.getPartidosGanados()
+    + estadisticas.getPartidosEmpatados()
+        + estadisticas.getPartidosPerdidos();
+
+    if(partidosJugados == 0) return 1.0;
+
+    return (float)estadisticas.getGolesContra() / partidosJugados;
+}
 Equipo& Equipo::operator=(const Equipo& otro){
     if(this != &otro){
         pais = otro.pais;

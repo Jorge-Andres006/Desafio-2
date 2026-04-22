@@ -45,6 +45,8 @@ public:
     void agregarJugador(const Jugador& jugador);
     void actualizarEstadisticas(int golesFavor,int golesContra,int resultado);
     void cargarEstadisticas(int golesFavor,int golesContra,int partidosGanados,int partidosEmpatados,int partidosPerdidos);
+    float getPromedioGolesFavor();
+    float getPromedioGolesContra();
 
     void mostrarEquipo();
 

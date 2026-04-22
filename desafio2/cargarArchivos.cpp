@@ -85,8 +85,6 @@ void guardarJugadoresCSV(const string& nombreArchivo, Equipo* equipos, int canti
     }
 
     archivo.close();
-
-    cout << "Archivo guardado correctamente" << endl;
 }
 void copiarArchivoCSV(const string& origen, const string& destino){
 
@@ -106,6 +104,4 @@ void copiarArchivoCSV(const string& origen, const string& destino){
 
     archivoOrigen.close();
     archivoDestino.close();
-
-    cout << "Archivo copiado correctamente" << endl;
 }
