@@ -1,4 +1,5 @@
 #include "cargarArchivos.h"
+#include "jugador.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -50,69 +51,61 @@ int contarLineas(const string nombreArchivo){
     return contador;
 }
 
-Equipo* cargarEquipos(const string nombreArchivo, int& cantidadEquipos){
-    cantidadEquipos = contarLineas(nombreArchivo);
 
-    ifstream archivo(nombreArchivo);
+void guardarJugadoresCSV(const string& nombreArchivo, Equipo* equipos, int cantidadEquipos){
 
-    if(!archivo){
-        cout << "Error abriendo archivo" << endl;
-        return nullptr;
+    ofstream archivo(nombreArchivo);
+
+    if(!archivo.is_open()){
+        cout << "Error al crear el archivo" << endl;
+        return;
     }
 
-    Equipo* equipos = new Equipo[cantidadEquipos];
+    archivo << "pais;nombre;apellido;numero;goles;minutos;amarillas;rojas;faltas;asistencias;partidos\n";
 
-    string linea;
-    getline(archivo, linea);
+    for(int i = 0; i < cantidadEquipos; i++){
 
-    int indiceEquipo = 0;
-    while(getline(archivo, linea)){
-        linea = limpiarTexto(linea);
+        for(int j = 0; j < equipos[i].getCantidadJugadores(); j++){
 
-        if(linea == "") continue;
-        if(!isdigit(linea[0])) continue;
+            Jugador* jugador = equipos[i].getJugador(j);
 
-        if(indiceEquipo >= cantidadEquipos){
-            cout << "Error: demasiadas lineas" << endl;
-            break;
-        }
-
-        int posicion = 0;
-
-        try{
-            int rankingFifa = stoi(obtenerCampo(linea, posicion));
-            string nombrePais = obtenerCampo(linea, posicion);
-            string directorTecnico = obtenerCampo(linea, posicion);
-            string nombreFederacion = obtenerCampo(linea, posicion);
-            string nombreConfederacion = obtenerCampo(linea, posicion);
-
-            int golesFavor = stoi(obtenerCampo(linea, posicion));
-            int golesContra = stoi(obtenerCampo(linea, posicion));
-            int partidosGanados = stoi(obtenerCampo(linea, posicion));
-            int partidosEmpatados = stoi(obtenerCampo(linea, posicion));
-            int partidosPerdidos = stoi(obtenerCampo(linea, posicion));
-
-            equipos[indiceEquipo].setPais(nombrePais);
-            equipos[indiceEquipo].setDirectorTecnico(directorTecnico);
-            equipos[indiceEquipo].setConfederacion(nombreConfederacion);
-            equipos[indiceEquipo].setFederacion(nombreFederacion);
-            equipos[indiceEquipo].setRanking(rankingFifa);
-
-            equipos[indiceEquipo].cargarEstadisticas(
-                golesFavor,
-                golesContra,
-                partidosGanados,
-                partidosEmpatados,
-                partidosPerdidos
-                );
-
-            indiceEquipo++;
-
-        } catch(...){
-            cout << "Error en linea: " << linea << endl;
+            archivo << equipos[i].getPais() << ";"
+                    << jugador->getNombre() << ";"
+                    << jugador->getApellido() << ";"
+                    << jugador->getNumero() << ";"
+                    << jugador->getGoles() << ";"
+                    << 0 << ";"
+                    << 0 << ";"
+                    << 0 << ";"
+                    << 0 << ";"
+                    << 0 << ";"
+                    << 0
+                    << "\n";
         }
     }
 
     archivo.close();
-    return equipos;
+
+    cout << "Archivo guardado correctamente" << endl;
+}
+void copiarArchivoCSV(const string& origen, const string& destino){
+
+    ifstream archivoOrigen(origen);
+    ofstream archivoDestino(destino);
+
+    if(!archivoOrigen.is_open() || !archivoDestino.is_open()){
+        cout << "Error al abrir archivos" << endl;
+        return;
+    }
+
+    string linea;
+
+    while(getline(archivoOrigen, linea)){
+        archivoDestino << linea << "\n";
+    }
+
+    archivoOrigen.close();
+    archivoDestino.close();
+
+    cout << "Archivo copiado correctamente" << endl;
 }

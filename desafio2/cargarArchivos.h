@@ -3,8 +3,9 @@
 
 #include "Equipo.h"
 
-Equipo* cargarEquipos(const string nombreArchivo, int& cantidad);
-
+string limpiarTexto(const string& texto);
 int contarLineas(const string nombreArchivo);
-
+string obtenerCampo(const string& linea, int& inicio);
+void guardarJugadoresCSV(const string& nombreArchivo, Equipo* equipos, int cantidadEquipos);
+void copiarArchivoCSV(const string& origen, const string& destino);
 #endif // CARGARARCHIVOS_H

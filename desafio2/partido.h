@@ -65,7 +65,6 @@ public:
     Partido& operator=(const Partido& otro);
 
 private:
-    //metodos auxiliares
     float calcularLambda(float golesFavor,float golesContra);
     int generarPoisson(float lambda);
     void simularEventos(Jugador** jugadores,int& goles,int& amarillas,int& rojas,int& faltas);

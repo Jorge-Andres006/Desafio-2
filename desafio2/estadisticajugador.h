@@ -5,11 +5,11 @@ class EstadisticaJugador{
 private:
     int partidosJugados;
     int goles;
-    int minutosJugados;
     int asistencias;
     int tarjetasAmarillas;
     int tarjetasRojas;
     int faltas;
+    int minutosJugados;
 
 public:
     EstadisticaJugador();
