@@ -67,6 +67,7 @@ public:
     void simularPartido();
     void mostrarPartido();
 
+
     Partido& operator=(const Partido& otro);
 };
 

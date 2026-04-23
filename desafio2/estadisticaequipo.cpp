@@ -8,6 +8,7 @@ EstadisticaEquipo::EstadisticaEquipo(){
     partidosGanados = 0;
     partidosEmpatados = 0;
     partidosPerdidos = 0;
+    minutosJugados = 0;
 }
 
 EstadisticaEquipo::EstadisticaEquipo(const EstadisticaEquipo& copia){
@@ -43,6 +44,10 @@ void EstadisticaEquipo::actualizar(int gf,int gc,int resultado){
     } else if(resultado == -1){
         partidosPerdidos++;
     }
+}
+
+void EstadisticaEquipo::sumarMinutosJugados(int minutos){
+    minutosJugados += minutos;
 }
 
 void EstadisticaEquipo::mostrar(){

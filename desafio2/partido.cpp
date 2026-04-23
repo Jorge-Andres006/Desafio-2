@@ -237,4 +237,20 @@ void Partido::mostrarPartido(){
     cout << endl << endl;
 }
 
+Partido& Partido::operator=(const Partido& otro){
+
+    if(this != &otro){
+        equipo1 = otro.equipo1;
+        equipo2 = otro.equipo2;
+        fecha = otro.fecha;
+        hora = otro.hora;
+        sede = otro.sede;
+
+        for(int i = 0; i < 3; i++){
+            arbitros[i] = otro.arbitros[i];
+        }
+    }
+
+    return *this;
+}
 

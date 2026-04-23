@@ -8,6 +8,7 @@ private:
     int partidosGanados;
     int partidosEmpatados;
     int partidosPerdidos;
+    int minutosJugados;
 
 public:
     EstadisticaEquipo();
@@ -27,6 +28,9 @@ public:
     void setPartidosPerdidos(int pp);
 
     void actualizar(int gf,int gc,int resultado);
+
+
+    void sumarMinutosJugados(int minutos);
 
     void mostrar();
 

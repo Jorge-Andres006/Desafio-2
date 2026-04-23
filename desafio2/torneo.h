@@ -1,11 +1,11 @@
 #ifndef TORNEO_H
 #define TORNEO_H
-
 #include <string>
 using namespace std;
 class Equipo;
 class Grupo;
 class Partido;
+class Eliminatoria;
 
 class Torneo{
 private:
@@ -50,6 +50,40 @@ public:
 
     Grupo* getGrupos();
     int getCantidadGrupos();
+
+    void obtenerClasificados(
+        Equipo**& equiposPrimeros,
+        Equipo**& equiposSegundos,
+        Equipo**& equiposTerceros,
+        char*& grupoPrimeros,
+        char*& grupoSegundos,
+        char*& grupoTerceros
+        );
+
+    void ordenarTerceros(
+        Equipo** equiposTerceros,
+        int* puntos,
+        int* diferenciaGol,
+        int* golesFavor,
+        char* grupos
+        );
+
+    void seleccionarMejoresTerceros(
+        Equipo** equiposTerceros,
+        char* gruposTerceros,
+        Equipo**& mejoresTerceros,
+        char*& gruposMejores
+        );
+
+    void ordenarSegundos(
+        Equipo** equiposSegundos,
+        int* puntos,
+        int* diferenciaGol,
+        int* golesFavor,
+        char* grupos
+        );
+
+   Eliminatoria generarDieciseisavos();
 };
 
 #endif

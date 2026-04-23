@@ -28,6 +28,7 @@ public:
     int getCantidad();
     int getPuntos(int i);
     Equipo* getEquipo(int i);
+    int getDiferenciaGol(int i);
 
     // métodos principales
     void calcularPuntos();

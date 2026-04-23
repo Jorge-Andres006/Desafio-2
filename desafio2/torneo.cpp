@@ -5,7 +5,7 @@
 #include "tablagrupo.h"
 #include <iostream>
 #include <random>
-
+#include "eliminatoria.h"
 using namespace std;
 
 int aleatorio(int limite){
@@ -294,9 +294,226 @@ void Torneo::simularTorneo(){
         for(int i = 0; i < cant; i++){
             partidos[i].simularPartido();
             partidos[i].mostrarPartido();
+
+
         }
         cout<<endl;
     }
+     generarDieciseisavos();
+}
+
+void Torneo::obtenerClasificados(
+    Equipo**& equiposPrimeros,
+    Equipo**& equiposSegundos,
+    Equipo**& equiposTerceros,
+    char*& grupoPrimeros,
+    char*& grupoSegundos,
+    char*& grupoTerceros
+    ){
+
+    equiposPrimeros = new Equipo*[12];
+    equiposSegundos = new Equipo*[12];
+    equiposTerceros = new Equipo*[12];
+
+    grupoPrimeros = new char[12];
+    grupoSegundos = new char[12];
+    grupoTerceros = new char[12];
+
+    for(int i = 0; i < cantidadGrupos; i++){
+
+        TablaGrupo tabla(grupos[i]);
+
+        tabla.calcularPuntos();
+        tabla.ordenarTabla();
+
+        equiposPrimeros[i] = tabla.getEquipo(0);
+        equiposSegundos[i] = tabla.getEquipo(1);
+        equiposTerceros[i] = tabla.getEquipo(2);
+
+        grupoPrimeros[i] = 'A' + i;
+        grupoSegundos[i] = 'A' + i;
+        grupoTerceros[i] = 'A' + i;
+    }
+}
+
+void Torneo::ordenarTerceros(
+    Equipo** equiposTerceros,
+    int* puntos,
+    int* diferenciaGol,
+    int* golesFavor,
+    char* grupos
+    ){
+
+    for(int i = 0; i < 11; i++){
+        for(int j = 0; j < 11 - i; j++){
+
+            bool cambiar = false;
+
+            if(puntos[j] < puntos[j+1]) cambiar = true;
+            else if(puntos[j] == puntos[j+1] && diferenciaGol[j] < diferenciaGol[j+1]) cambiar = true;
+            else if(puntos[j] == puntos[j+1] && diferenciaGol[j] == diferenciaGol[j+1] && golesFavor[j] < golesFavor[j+1]) cambiar = true;
+            else if(puntos[j] == puntos[j+1] && diferenciaGol[j] == diferenciaGol[j+1] && golesFavor[j] == golesFavor[j+1] && rand()%2) cambiar = true;
+
+            if(cambiar){
+
+                Equipo* tempE = equiposTerceros[j];
+                equiposTerceros[j] = equiposTerceros[j+1];
+                equiposTerceros[j+1] = tempE;
+
+                int temp;
+
+                temp = puntos[j];
+                puntos[j] = puntos[j+1];
+                puntos[j+1] = temp;
+
+                temp = diferenciaGol[j];
+                diferenciaGol[j] = diferenciaGol[j+1];
+                diferenciaGol[j+1] = temp;
+
+                temp = golesFavor[j];
+                golesFavor[j] = golesFavor[j+1];
+                golesFavor[j+1] = temp;
+
+                char tempC = grupos[j];
+                grupos[j] = grupos[j+1];
+                grupos[j+1] = tempC;
+            }
+        }
+    }
+}
+
+void Torneo::seleccionarMejoresTerceros(
+    Equipo** equiposTerceros,
+    char* gruposTerceros,
+    Equipo**& mejoresTerceros,
+    char*& gruposMejores
+    ){
+
+    mejoresTerceros = new Equipo*[8];
+    gruposMejores = new char[8];
+
+    for(int i = 0; i < 8; i++){
+        mejoresTerceros[i] = equiposTerceros[i];
+        gruposMejores[i] = gruposTerceros[i];
+    }
+}
+
+void Torneo::ordenarSegundos(
+    Equipo** equiposSegundos,
+    int* puntos,
+    int* diferenciaGol,
+    int* golesFavor,
+    char* grupos
+    ){
+
+    for(int i = 0; i < 11; i++){
+        for(int j = 0; j < 11 - i; j++){
+
+            bool cambiar = false;
+
+            if(puntos[j] < puntos[j+1]) cambiar = true;
+            else if(puntos[j] == puntos[j+1] && diferenciaGol[j] < diferenciaGol[j+1]) cambiar = true;
+            else if(puntos[j] == puntos[j+1] && diferenciaGol[j] == diferenciaGol[j+1] && golesFavor[j] < golesFavor[j+1]) cambiar = true;
+
+            if(cambiar){
+
+                Equipo* tempE = equiposSegundos[j];
+                equiposSegundos[j] = equiposSegundos[j+1];
+                equiposSegundos[j+1] = tempE;
+
+                int temp;
+
+                temp = puntos[j];
+                puntos[j] = puntos[j+1];
+                puntos[j+1] = temp;
+
+                temp = diferenciaGol[j];
+                diferenciaGol[j] = diferenciaGol[j+1];
+                diferenciaGol[j+1] = temp;
+
+                temp = golesFavor[j];
+                golesFavor[j] = golesFavor[j+1];
+                golesFavor[j+1] = temp;
+
+                char tempC = grupos[j];
+                grupos[j] = grupos[j+1];
+                grupos[j+1] = tempC;
+            }
+        }
+    }
+}
+
+Eliminatoria Torneo::generarDieciseisavos(){
+
+    Equipo** equiposPrimeros;
+    Equipo** equiposSegundos;
+    Equipo** equiposTerceros;
+
+    char* grupoPrimeros;
+    char* grupoSegundos;
+    char* grupoTerceros;
+
+    obtenerClasificados(
+        equiposPrimeros,
+        equiposSegundos,
+        equiposTerceros,
+        grupoPrimeros,
+        grupoSegundos,
+        grupoTerceros
+        );
+
+    int puntosT[12], dgT[12], gfT[12];
+
+    for(int i = 0; i < 12; i++){
+
+        TablaGrupo tabla(grupos[i]);
+        tabla.calcularPuntos();
+        tabla.ordenarTabla();
+
+        puntosT[i] = tabla.getPuntos(2);
+        dgT[i] = tabla.getDiferenciaGol(2);
+        gfT[i] = tabla.getEquipo(2)->getGolesFavor();
+    }
+
+    ordenarTerceros(equiposTerceros, puntosT, dgT, gfT, grupoTerceros);
+
+    Equipo** mejoresTerceros;
+    char* grupoMejoresTerceros;
+
+    seleccionarMejoresTerceros(
+        equiposTerceros,
+        grupoTerceros,
+        mejoresTerceros,
+        grupoMejoresTerceros
+        );
+
+    int puntosS[12], dgS[12], gfS[12];
+
+    for(int i = 0; i < 12; i++){
+
+        TablaGrupo tabla(grupos[i]);
+        tabla.calcularPuntos();
+        tabla.ordenarTabla();
+
+        puntosS[i] = tabla.getPuntos(1);
+        dgS[i] = tabla.getDiferenciaGol(1);
+        gfS[i] = tabla.getEquipo(1)->getGolesFavor();
+    }
+
+    ordenarSegundos(equiposSegundos, puntosS, dgS, gfS, grupoSegundos);
+
+    Eliminatoria r16;
+
+    r16.crearDesdeClasificados(
+        equiposPrimeros,
+        equiposSegundos,
+        mejoresTerceros,
+        grupoPrimeros,
+        grupoSegundos,
+        grupoMejoresTerceros
+        );
+
+    return r16;
 }
 void Torneo::mostrarBombos(){
     // cout << "====== Bombo 1 ======" << endl;

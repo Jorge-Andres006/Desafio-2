@@ -143,3 +143,11 @@ Equipo& Equipo::operator=(const Equipo& otro){
 
     return *this;
 }
+
+int Equipo::getGolesFavor(){
+    return estadisticas.getGolesFavor();
+}
+
+EstadisticaEquipo& Equipo::getEstadistica(){
+    return estadisticas;
+}

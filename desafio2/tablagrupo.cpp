@@ -56,6 +56,9 @@ Equipo* TablaGrupo::getEquipo(int i){
     return equipos[i];
 }
 
+int TablaGrupo::getDiferenciaGol(int i){
+    return diferenciaGol[i];
+}
 
 void TablaGrupo::calcularPuntos(){
 

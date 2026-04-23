@@ -47,9 +47,9 @@ public:
     void cargarEstadisticas(int golesFavor,int golesContra,int partidosGanados,int partidosEmpatados,int partidosPerdidos);
     float getPromedioGolesFavor();
     float getPromedioGolesContra();
-
+    int getGolesFavor();
     void mostrarEquipo();
-
+    EstadisticaEquipo& getEstadistica();
     Equipo& operator=(const Equipo& otro);
 };
 
