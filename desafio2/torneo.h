@@ -1,5 +1,6 @@
 #ifndef TORNEO_H
 #define TORNEO_H
+#include "eliminatoria.h"
 #include <string>
 using namespace std;
 class Equipo;
@@ -17,12 +18,26 @@ private:
     Equipo **bombo2;
     Equipo **bombo3;
     Equipo **bombo4;
+    Equipo **ganadores16;
+    Equipo **ganadores8;
+    Equipo **ganadores4;
+    Equipo **ganadores2;
+    Equipo **campeon;
+    Equipo **perdedoresSemis;
+    Equipo **perdedoresFinal;
+
 
     Grupo *grupos;
 
+    Eliminatoria dieciseisavos;
+    Eliminatoria octavos;
+    Eliminatoria cuartos;
+    Eliminatoria semis;
+    Eliminatoria final;
     int cantidadGrupos;
     int cantidadEquipos;
     int anio;
+    int cant16, cant8, cant4, cant2, cant1;
 
     void ordenarPorRanking();
     void conformarBombos();
@@ -67,11 +82,6 @@ public:
                          int *diferenciaGol, int *golesFavor, char *grupos);
 
     Eliminatoria generarDieciseisavos();
-
-    void mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
-                             Equipo **campeon, Equipo **ganadores16, int cant16,
-                             Equipo **ganadores8, int cant8, Equipo **ganadores4,
-                             int cant4);
 
     void mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
                              Equipo **campeon, Equipo **perdedoresFinal,

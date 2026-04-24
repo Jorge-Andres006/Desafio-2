@@ -21,7 +21,7 @@ add_executable(desafio2 main.cpp
     tablagrupo.h tablagrupo.cpp
     InicializarDatos.h
     inicializarDatos.cpp
-    metricas.h metricas.cpp)
+)
 
 include(GNUInstallDirs)
 install(TARGETS desafio2

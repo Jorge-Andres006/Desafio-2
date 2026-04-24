@@ -69,8 +69,12 @@ Equipo *TablaGrupo::getEquipo(int i) { return equipos[i]; }
 void TablaGrupo::calcularPuntos() {
 
     for (int i = 0; i < cantidad; i++) {
-        puntos[i] = partidosJugados[i] = partidosGanados[i] = 0;
-        partidosEmpatados[i] = partidosPerdidos[i] = diferenciaGol[i] = 0;
+        puntos[i] = 0;
+        partidosJugados[i] =0;
+        partidosGanados[i] = 0;
+        partidosEmpatados[i] = 0;
+        partidosPerdidos[i] =0;
+        diferenciaGol[i] = 0;
     }
 
     Partido *partidos = grupo->getPartidos();
@@ -115,34 +119,38 @@ void TablaGrupo::calcularPuntos() {
 }
 
 void TablaGrupo::ordenarTabla() {
-    for (int i = 0; i < cantidad - 1; i++) {
-        for (int j = 0; j < cantidad - 1 - i; j++) {
 
-            bool cambiar = (puntos[j] < puntos[j + 1]) ||
-                           (puntos[j] == puntos[j + 1] &&
-                                                           diferenciaGol[j] < diferenciaGol[j + 1]);
+    for (int i = 1; i < cantidad; i++) {
+        int p  = puntos[i];
+        int pj = partidosJugados[i];
+        int pg = partidosGanados[i];
+        int pe = partidosEmpatados[i];
+        int pp = partidosPerdidos[i];
+        int dg = diferenciaGol[i];
+        Equipo* e = equipos[i];
 
-            if (cambiar) {
+        int j = i - 1;
+        while (j >= 0 &&
+               (puntos[j] < p ||
+                (puntos[j] == p && diferenciaGol[j] < dg))) {
 
-#define SWAP_INT(a, b)                                                         \
-                {                                                                            \
-                int t = (a);                                                               \
-                (a) = (b);                                                                 \
-                (b) = t;                                                                   \
-            }
-                SWAP_INT(puntos[j], puntos[j + 1]);
-                SWAP_INT(partidosJugados[j], partidosJugados[j + 1]);
-                SWAP_INT(partidosGanados[j], partidosGanados[j + 1]);
-                SWAP_INT(partidosEmpatados[j], partidosEmpatados[j + 1]);
-                SWAP_INT(partidosPerdidos[j], partidosPerdidos[j + 1]);
-                SWAP_INT(diferenciaGol[j], diferenciaGol[j + 1]);
-#undef SWAP_INT
+            puntos[j + 1] = puntos[j];
+            partidosJugados[j + 1] = partidosJugados[j];
+            partidosGanados[j + 1] = partidosGanados[j];
+            partidosEmpatados[j + 1] = partidosEmpatados[j];
+            partidosPerdidos[j + 1] = partidosPerdidos[j];
+            diferenciaGol[j + 1] = diferenciaGol[j];
+            equipos[j + 1] = equipos[j];
 
-                Equipo *tempE = equipos[j];
-                equipos[j] = equipos[j + 1];
-                equipos[j + 1] = tempE;
-            }
+            j--;
         }
+        puntos[j + 1] = p;
+        partidosJugados[j + 1] = pj;
+        partidosGanados[j + 1] = pg;
+        partidosEmpatados[j + 1] = pe;
+        partidosPerdidos[j + 1] = pp;
+        diferenciaGol[j + 1] = dg;
+        equipos[j + 1] = e;
     }
 }
 

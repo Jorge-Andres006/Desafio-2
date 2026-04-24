@@ -42,7 +42,9 @@ int Equipo::getRanking() { return ranking; }
 string Equipo::getDirectorTecnico() { return directorTecnico; }
 string Equipo::getConfederacion() { return confederacion; }
 
-Jugador *Equipo::getJugador(int indice) {
+Jugador* Equipo::getJugador(int indice) {
+    if (jugadores == nullptr) return nullptr;
+
     if (indice >= 0 && indice < cantidadJugadores) {
         return &jugadores[indice];
     }

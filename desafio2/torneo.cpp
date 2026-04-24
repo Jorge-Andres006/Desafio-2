@@ -10,8 +10,9 @@
 using namespace std;
 
 int aleatorio(int limite) {
+    if(limite<=0) return 0;
     static random_device rd;
-    static mt19937 gen(rd());
+    static mt19937 gen(random_device{}());
     uniform_int_distribution<> dist(0, limite - 1);
     return dist(gen);
 }
@@ -43,6 +44,9 @@ void Torneo::setEquipos(Equipo **equipos, int cantidad) {
 }
 
 void Torneo::inicializarGrupos(int cantidad) {
+
+    delete[] grupos;
+
     cantidadGrupos = cantidad;
     grupos = new Grupo[cantidadGrupos];
 
@@ -52,40 +56,53 @@ void Torneo::inicializarGrupos(int cantidad) {
 }
 
 void Torneo::ordenarPorRanking() {
+
     for (int i = 0; i < cantidadEquipos - 1; i++) {
+        bool cambio = false;
         for (int j = 0; j < cantidadEquipos - i - 1; j++) {
 
-            if (equipos[j]->getRanking() > equipos[j + 1]->getRanking()) {
+            if (equipos[j] && equipos[j + 1] &&
+                equipos[j]->getRanking() > equipos[j + 1]->getRanking()) {
+
                 Equipo *aux = equipos[j];
                 equipos[j] = equipos[j + 1];
                 equipos[j + 1] = aux;
+
+                cambio = true;
             }
         }
+        if (!cambio) break;
     }
 }
 void Torneo::conformarBombos() {
 
+    delete[] bombo1;
+    delete[] bombo2;
+    delete[] bombo3;
+    delete[] bombo4;
+
     ordenarPorRanking();
 
-    bombo1 = new Equipo *[12];
-    bombo2 = new Equipo *[12];
-    bombo3 = new Equipo *[12];
-    bombo4 = new Equipo *[12];
+    bombo1 = new Equipo*[12];
+    bombo2 = new Equipo*[12];
+    bombo3 = new Equipo*[12];
+    bombo4 = new Equipo*[12];
 
     int i1 = 0, i2 = 0, i3 = 0, i4 = 0;
+
+    int idxUSA = -1;
 
     for (int i = 0; i < cantidadEquipos; i++) {
         if (equipos[i]->getPais() == "United States") {
             bombo1[i1++] = equipos[i];
-            equipos[i] = NULL;
+            idxUSA = i;
             break;
         }
     }
 
     for (int i = 0; i < cantidadEquipos; i++) {
 
-        if (equipos[i] == NULL)
-            continue;
+        if (i == idxUSA) continue;
 
         if (i1 < 12)
             bombo1[i1++] = equipos[i];
@@ -126,22 +143,30 @@ bool Torneo::esValido(Grupo &grupo, Equipo *nuevo) {
 int Torneo::sortearDeBombo(Equipo **bombo, bool *usado, int tamano,
                            Grupo &grupo) {
 
-    int intentos = 0;
+    int indices[12];
+    int n = 0;
 
-    while (intentos < 100) {
-
-        int idx = aleatorio(tamano);
-
-        if (!usado[idx]) {
-
-            if (esValido(grupo, bombo[idx])) {
-                grupo.agregarEquipo(bombo[idx]);
-                usado[idx] = true;
-                return 1;
-            }
+    for (int i = 0; i < tamano; i++) {
+        if (!usado[i]) {
+            indices[n++] = i;
         }
+    }
 
-        intentos++;
+    for (int i = 0; i < n; i++) {
+        int j = aleatorio(n);
+        int temp = indices[i];
+        indices[i] = indices[j];
+        indices[j] = temp;
+    }
+    for (int i = 0; i < n; i++) {
+
+        int idx = indices[i];
+
+        if (esValido(grupo, bombo[idx])) {
+            grupo.agregarEquipo(bombo[idx]);
+            usado[idx] = true;
+            return 1;
+        }
     }
 
     return 0;
@@ -299,47 +324,24 @@ void Torneo::mostrarTablasGrupos() {
         tabla.mostrarTabla();
     }
 }
-void Torneo::simularTorneo() {
-
-    cout << "Inicio simulacion" << endl;
-
-    for (int i = 0; i < cantidadGrupos; i++) {
-        grupos[i].generarPartidos();
-    }
-
-    asignarFechasGrupos();
-
-    for (int g = 0; g < cantidadGrupos; g++) {
-
-        cout << "Partidos grupo " << grupos[g].getLetra() << endl;
-
-        Partido *partidos = grupos[g].getPartidos();
-        int cant = grupos[g].getCantidadPartidos();
-
-        for (int i = 0; i < cant; i++) {
-            partidos[i].simularPartido();
-            partidos[i].mostrarPartido();
-        }
-        cout << endl;
-    }
-    generarDieciseisavos();
-}
 
 void Torneo::obtenerClasificados(Equipo **&equiposPrimeros,
                                  Equipo **&equiposSegundos,
                                  Equipo **&equiposTerceros,
-                                 char *&grupoPrimeros, char *&grupoSegundos,
+                                 char *&grupoPrimeros,
+                                 char *&grupoSegundos,
                                  char *&grupoTerceros) {
 
-    equiposPrimeros = new Equipo *[12];
-    equiposSegundos = new Equipo *[12];
-    equiposTerceros = new Equipo *[12];
+
+    equiposPrimeros = new Equipo*[12];
+    equiposSegundos = new Equipo*[12];
+    equiposTerceros = new Equipo*[12];
 
     grupoPrimeros = new char[12];
     grupoSegundos = new char[12];
     grupoTerceros = new char[12];
 
-    for (int i = 0; i < cantidadGrupos; i++) {
+    for (int i = 0; i < 12; i++) {
 
         TablaGrupo tabla(grupos[i]);
 
@@ -482,26 +484,6 @@ Eliminatoria Torneo::generarDieciseisavos() {
                         grupoPrimeros, grupoSegundos, grupoTerceros);
 
     int puntosT[12], dgT[12], gfT[12];
-
-    for (int i = 0; i < 12; i++) {
-
-        TablaGrupo tabla(grupos[i]);
-        tabla.calcularPuntos();
-        tabla.ordenarTabla();
-
-        puntosT[i] = tabla.getPuntos(2);
-        dgT[i] = tabla.getDiferenciaGol(2);
-        gfT[i] = tabla.getEquipo(2)->getGolesFavor();
-    }
-
-    ordenarTerceros(equiposTerceros, puntosT, dgT, gfT, grupoTerceros);
-
-    Equipo **mejoresTerceros;
-    char *grupoMejoresTerceros;
-
-    seleccionarMejoresTerceros(equiposTerceros, grupoTerceros, mejoresTerceros,
-                               grupoMejoresTerceros);
-
     int puntosS[12], dgS[12], gfS[12];
 
     for (int i = 0; i < 12; i++) {
@@ -510,27 +492,99 @@ Eliminatoria Torneo::generarDieciseisavos() {
         tabla.calcularPuntos();
         tabla.ordenarTabla();
 
+        // terceros
+        puntosT[i] = tabla.getPuntos(2);
+        dgT[i] = tabla.getDiferenciaGol(2);
+        gfT[i] = tabla.getEquipo(2)->getGolesFavor();
+
+        // segundos
         puntosS[i] = tabla.getPuntos(1);
         dgS[i] = tabla.getDiferenciaGol(1);
         gfS[i] = tabla.getEquipo(1)->getGolesFavor();
     }
 
+    ordenarTerceros(equiposTerceros, puntosT, dgT, gfT, grupoTerceros);
+
+    Equipo **mejoresTerceros;
+    char *grupoMejoresTerceros;
+
+    seleccionarMejoresTerceros(equiposTerceros, grupoTerceros,
+                               mejoresTerceros, grupoMejoresTerceros);
+
     ordenarSegundos(equiposSegundos, puntosS, dgS, gfS, grupoSegundos);
 
     Eliminatoria r16;
 
-    r16.crearDesdeClasificados(equiposPrimeros, equiposSegundos, mejoresTerceros,
+    r16.crearDesdeClasificados(equiposPrimeros, equiposSegundos,
+                               mejoresTerceros,
                                grupoPrimeros, grupoSegundos,
                                grupoMejoresTerceros);
+    delete[] equiposPrimeros;
+    delete[] equiposSegundos;
+    delete[] equiposTerceros;
+
+    delete[] grupoPrimeros;
+    delete[] grupoSegundos;
+    delete[] grupoTerceros;
+
+    delete[] mejoresTerceros;
+    delete[] grupoMejoresTerceros;
 
     return r16;
 }
 
+void contarConf(Equipo **lista, int cant) {
+
+    if (!lista)
+        return;
+
+    string confs[50];
+    int cont[50] = {0};
+    int total = 0;
+
+    for (int i = 0; i < cant; i++) {
+
+        if (!lista[i])
+            continue;
+
+        string c = lista[i]->getConfederacion();
+
+        int pos = -1;
+
+        for (int j = 0; j < total; j++) {
+            if (confs[j] == c) {
+                pos = j;
+                break;
+            }
+        }
+
+        if (pos == -1) {
+            confs[total] = c;
+            cont[total] = 1;
+            total++;
+        } else {
+            cont[pos]++;
+        }
+    }
+
+    int max = 0;
+    string mejor;
+
+    for (int i = 0; i < total; i++) {
+        if (cont[i] > max) {
+            max = cont[i];
+            mejor = confs[i];
+        }
+    }
+
+    cout << mejor << " (" << max << ")";
+}
 void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
                                  Equipo **campeon, Equipo **perdedoresFinal,
                                  Equipo **perdedoresSemis, Equipo **ganadores16,
                                  int cant16, Equipo **ganadores8, int cant8,
                                  Equipo **ganadores4, int cant4) {
+
     cout << "\n================ INFORME FINAL ================\n";
 
     if (!campeon || !campeon[0]) {
@@ -541,7 +595,6 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
     cout << "\nCAMPEON: " << campeon[0]->getPais() << endl;
 
     cout << "\nTOP 4 DEL MUNDIAL:\n";
-
     cout << "1. " << campeon[0]->getPais() << endl;
 
     if (perdedoresFinal && perdedoresFinal[0])
@@ -558,8 +611,7 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
 
     for (int i = 0; i < campeon[0]->getCantidadJugadores(); i++) {
         Jugador *j = campeon[0]->getJugador(i);
-        if (!j)
-            continue;
+        if (!j) continue;
 
         if (!maxCampeon || j->getEstadistica().getGoles() >
                                maxCampeon->getEstadistica().getGoles()) {
@@ -568,8 +620,10 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
     }
 
     if (maxCampeon) {
-        cout << "\nMax goleador del campeon: " << maxCampeon->getNombre() << " "
-             << maxCampeon->getApellido() << " - " << campeon[0]->getPais() << " ("
+        cout << "\nMax goleador del campeon: "
+             << maxCampeon->getNombre() << " "
+             << maxCampeon->getApellido() << " - "
+             << campeon[0]->getPais() << " ("
              << maxCampeon->getEstadistica().getGoles() << ")\n";
     }
 
@@ -577,31 +631,23 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
     Equipo *eq1 = nullptr, *eq2 = nullptr, *eq3 = nullptr;
 
     for (int i = 0; i < cantidadEquipos; i++) {
-        if (!equipos[i])
-            continue;
+        if (!equipos[i]) continue;
 
         for (int j = 0; j < equipos[i]->getCantidadJugadores(); j++) {
             Jugador *act = equipos[i]->getJugador(j);
-            if (!act)
-                continue;
+            if (!act) continue;
 
             int goles = act->getEstadistica().getGoles();
 
             if (!top1 || goles > top1->getEstadistica().getGoles()) {
-                top3 = top2;
-                eq3 = eq2;
-                top2 = top1;
-                eq2 = eq1;
-                top1 = act;
-                eq1 = equipos[i];
+                top3 = top2; eq3 = eq2;
+                top2 = top1; eq2 = eq1;
+                top1 = act;  eq1 = equipos[i];
             } else if (!top2 || goles > top2->getEstadistica().getGoles()) {
-                top3 = top2;
-                eq3 = eq2;
-                top2 = act;
-                eq2 = equipos[i];
+                top3 = top2; eq3 = eq2;
+                top2 = act;  eq2 = equipos[i];
             } else if (!top3 || goles > top3->getEstadistica().getGoles()) {
-                top3 = act;
-                eq3 = equipos[i];
+                top3 = act;  eq3 = equipos[i];
             }
         }
     }
@@ -609,25 +655,24 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
     cout << "\nTOP 3 GOLEADORES:\n";
 
     if (top1)
-        cout << "1. " << top1->getNombre() << " " << top1->getApellido() << " - "
-             << eq1->getPais() << " (" << top1->getEstadistica().getGoles()
-             << ")\n";
+        cout << "1. " << top1->getNombre() << " " << top1->getApellido()
+             << " - " << eq1->getPais()
+             << " (" << top1->getEstadistica().getGoles() << ")\n";
 
     if (top2)
-        cout << "2. " << top2->getNombre() << " " << top2->getApellido() << " - "
-             << eq2->getPais() << " (" << top2->getEstadistica().getGoles()
-             << ")\n";
+        cout << "2. " << top2->getNombre() << " " << top2->getApellido()
+             << " - " << eq2->getPais()
+             << " (" << top2->getEstadistica().getGoles() << ")\n";
 
     if (top3)
-        cout << "3. " << top3->getNombre() << " " << top3->getApellido() << " - "
-             << eq3->getPais() << " (" << top3->getEstadistica().getGoles()
-             << ")\n";
+        cout << "3. " << top3->getNombre() << " " << top3->getApellido()
+             << " - " << eq3->getPais()
+             << " (" << top3->getEstadistica().getGoles() << ")\n";
 
     Equipo *maxEquipo = nullptr;
 
     for (int i = 0; i < cantidadEquipos; i++) {
-        if (!equipos[i])
-            continue;
+        if (!equipos[i]) continue;
 
         if (!maxEquipo ||
             equipos[i]->getGolesFavor() > maxEquipo->getGolesFavor()) {
@@ -636,58 +681,21 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
     }
 
     if (maxEquipo) {
-        cout << "\nEquipo con mas goles historicos: " << maxEquipo->getPais()
+        cout << "\nEquipo con mas goles historicos: "
+             << maxEquipo->getPais()
              << " (" << maxEquipo->getGolesFavor() << " goles)\n";
     }
-
-    auto contarConf = [](Equipo **lista, int cant) {
-        if (!lista)
-            return;
-
-        string confs[50];
-        int cont[50] = {0}, total = 0;
-
-        for (int i = 0; i < cant; i++) {
-            if (!lista[i])
-                continue;
-
-            string c = lista[i]->getConfederacion();
-
-            int pos = -1;
-            for (int j = 0; j < total; j++) {
-                if (confs[j] == c) {
-                    pos = j;
-                    break;
-                }
-            }
-
-            if (pos == -1) {
-                confs[total] = c;
-                cont[total++] = 1;
-            } else
-                cont[pos]++;
-        }
-
-        int max = 0;
-        string mejor;
-        for (int i = 0; i < total; i++) {
-            if (cont[i] > max) {
-                max = cont[i];
-                mejor = confs[i];
-            }
-        }
-
-        cout << mejor << " (" << max << ")";
-    };
 
     cout << "\n\nConfederacion con mayor presencia:\n";
 
     cout << "R16: ";
     contarConf(ganadores16, cant16);
     cout << endl;
+
     cout << "R8: ";
     contarConf(ganadores8, cant8);
     cout << endl;
+
     cout << "R4: ";
     contarConf(ganadores4, cant4);
     cout << endl;
@@ -726,4 +734,94 @@ void Torneo::mostrarBombos() {
     }
 
     cout << endl;
+}
+void Torneo::simularTorneo() {
+
+    cout << "Inicio simulacion" << endl;
+
+    for (int i = 0; i < cantidadGrupos; i++) {
+        grupos[i].generarPartidos();
+    }
+
+    asignarFechasGrupos();
+    for (int g = 0; g < cantidadGrupos; g++) {
+
+        cout << "Partidos grupo " << grupos[g].getLetra() << endl;
+
+        Partido *partidos = grupos[g].getPartidos();
+        int cant = grupos[g].getCantidadPartidos();
+
+        for (int i = 0; i < cant; i++) {
+            partidos[i].simularPartido();
+            partidos[i].mostrarPartido();
+        }
+        cout << endl;
+    }
+
+    mostrarTablasGrupos();
+
+    Eliminatoria dieciseisavos = generarDieciseisavos();
+
+    int cant16;
+    Equipo **ganadores16 = dieciseisavos.simularRonda(cant16, "DIECISEISAVOS");
+
+    Eliminatoria octavos = dieciseisavos.crearSiguienteRonda(ganadores16, cant16);
+
+    int cant8;
+    Equipo **ganadores8 = octavos.simularRonda(cant8, "OCTAVOS");
+
+    Eliminatoria cuartos = octavos.crearSiguienteRonda(ganadores8, cant8);
+
+    int cant4;
+    Equipo **ganadores4 = cuartos.simularRonda(cant4, "CUARTOS");
+
+    Eliminatoria semis = cuartos.crearSiguienteRonda(ganadores4, cant4);
+
+    int cant2;
+    Equipo **ganadores2 = semis.simularRonda(cant2, "SEMIFINAL");
+
+    Equipo **perdedoresSemis = new Equipo*[2];
+    int idx = 0;
+
+    for (int i = 0; i < cant4; i++) {
+
+        bool esGanador = false;
+
+        for (int j = 0; j < cant2; j++) {
+            if (ganadores4[i] == ganadores2[j]) {
+                esGanador = true;
+                break;
+            }
+        }
+
+        if (!esGanador && idx < 2) {
+            perdedoresSemis[idx++] = ganadores4[i];
+        }
+    }
+    Eliminatoria final = semis.crearSiguienteRonda(ganadores2, cant2);
+
+    int cant1;
+    Equipo **campeon = final.simularRonda(cant1, "FINAL");
+
+    Equipo **perdedoresFinal = new Equipo*[1];
+
+    if (ganadores2[0] == campeon[0]) {
+        perdedoresFinal[0] = ganadores2[1];
+    } else {
+        perdedoresFinal[0] = ganadores2[0];
+    }
+
+    mostrarInformeFinal(equipos, cantidadEquipos, campeon,
+                        perdedoresFinal, perdedoresSemis,
+                        ganadores16, cant16,
+                        ganadores8, cant8,
+                        ganadores4, cant4);
+    delete[] ganadores16;
+    delete[] ganadores8;
+    delete[] ganadores4;
+    delete[] ganadores2;
+    delete[] campeon;
+
+    delete[] perdedoresSemis;
+    delete[] perdedoresFinal;
 }

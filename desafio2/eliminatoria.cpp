@@ -4,12 +4,10 @@
 #include <random>
 
 using namespace std;
-
 Eliminatoria::Eliminatoria() {
     cantidad = 0;
-    partidos = new Partido[32];
+    partidos = nullptr;
 }
-
 Eliminatoria::Eliminatoria(const Eliminatoria &otra) {
 
     cantidad = otra.cantidad;
@@ -61,10 +59,11 @@ void Eliminatoria::agregarPartido(Equipo *e1, Equipo *e2) {
         nuevo[i] = partidos[i];
     }
 
-    nuevo[cantidad] = Partido();
     nuevo[cantidad].setEquipos(e1, e2);
 
-    string arbitros[3] = {"codArbitro1", "codArbitro2", "codArbitro3"};
+    string arbitros[3] = {
+        "codArbitro1", "codArbitro2", "codArbitro3"
+    };
 
     nuevo[cantidad].setHora("00:00");
     nuevo[cantidad].setSede("nombreSede");
@@ -72,6 +71,7 @@ void Eliminatoria::agregarPartido(Equipo *e1, Equipo *e2) {
 
     delete[] partidos;
     partidos = nuevo;
+
     cantidad++;
 }
 
@@ -90,18 +90,23 @@ void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
     for (int i = 0; i < 8; i++) {
 
         idx = -1;
-
         for (int j = 0; j < 8; j++) {
-            if (!usadosTerceros[j] && grupoMejoresTerceros[j] != grupoPrimeros[i]) {
+            if (!usadosTerceros[j] &&
+                grupoMejoresTerceros[j] != grupoPrimeros[i]) {
                 idx = j;
                 break;
             }
         }
-
-        if (idx != -1) {
-            agregarPartido(equiposPrimeros[i], mejoresTerceros[idx]);
-            usadosTerceros[idx] = true;
+        if (idx == -1) {
+            for (int j = 0; j < 8; j++) {
+                if (!usadosTerceros[j]) {
+                    idx = j;
+                    break;
+                }
+            }
         }
+        agregarPartido(equiposPrimeros[i], mejoresTerceros[idx]);
+        usadosTerceros[idx] = true;
     }
 
     for (int i = 8; i < 12; i++) {
@@ -109,31 +114,50 @@ void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
         idx = -1;
 
         for (int j = 0; j < 12; j++) {
-            if (!usadosSegundos[j] && grupoSegundos[j] != grupoPrimeros[i]) {
+            if (!usadosSegundos[j] &&
+                grupoSegundos[j] != grupoPrimeros[i]) {
                 idx = j;
                 break;
             }
         }
-
-        if (idx != -1) {
-            agregarPartido(equiposPrimeros[i], equiposSegundos[idx]);
-            usadosSegundos[idx] = true;
+        if (idx == -1) {
+            for (int j = 0; j < 12; j++) {
+                if (!usadosSegundos[j]) {
+                    idx = j;
+                    break;
+                }
+            }
         }
-    }
 
+        agregarPartido(equiposPrimeros[i], equiposSegundos[idx]);
+        usadosSegundos[idx] = true;
+    }
     for (int i = 0; i < 12; i++) {
+
         if (usadosSegundos[i])
             continue;
 
         for (int j = i + 1; j < 12; j++) {
+
             if (usadosSegundos[j])
                 continue;
 
             if (grupoSegundos[i] != grupoSegundos[j]) {
+
                 agregarPartido(equiposSegundos[i], equiposSegundos[j]);
                 usadosSegundos[i] = true;
                 usadosSegundos[j] = true;
                 break;
+            }
+        }
+        if (!usadosSegundos[i]) {
+            for (int j = i + 1; j < 12; j++) {
+                if (!usadosSegundos[j]) {
+                    agregarPartido(equiposSegundos[i], equiposSegundos[j]);
+                    usadosSegundos[i] = true;
+                    usadosSegundos[j] = true;
+                    break;
+                }
             }
         }
     }
@@ -255,7 +279,6 @@ Equipo **Eliminatoria::simularRonda(int &cantidadGanadores,
 
     cout << "\n====== " << nombreRonda << " ======\n";
 
-    // VALIDACIÓN
     if (cantidad <= 0) {
         cout << "Error: no hay partidos en esta ronda\n";
         cantidadGanadores = 0;

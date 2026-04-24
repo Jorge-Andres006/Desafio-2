@@ -30,9 +30,22 @@ Partido::Partido(const Partido &copia) {
 
     equipo1 = copia.equipo1;
     equipo2 = copia.equipo2;
+
+    cantidadConvocados = copia.cantidadConvocados;
+
+    convocadosEquipo1 = new Jugador*[11];
+    convocadosEquipo2 = new Jugador*[11];
+
+    for (int i = 0; i < 11; i++) {
+        convocadosEquipo1[i] = copia.convocadosEquipo1[i];
+        convocadosEquipo2[i] = copia.convocadosEquipo2[i];
+    }
 }
 
-Partido::~Partido() {}
+Partido::~Partido() {
+    delete[] convocadosEquipo1;
+    delete[] convocadosEquipo2;
+}
 
 Equipo *Partido::getEquipo1() { return equipo1; }
 Equipo *Partido::getEquipo2() { return equipo2; }
@@ -105,7 +118,8 @@ void Partido::convocarJugadores() {
 
     for (int i = 0; i < 11;) {
 
-        int idx = rand() % equipo1->getCantidadJugadores();
+        uniform_int_distribution<> dist(0, equipo1->getCantidadJugadores() - 1);
+        int idx = dist(gen);
 
         if (!usados1[idx]) {
             convocadosEquipo1[i] = equipo1->getJugador(idx);
@@ -116,7 +130,8 @@ void Partido::convocarJugadores() {
 
     for (int i = 0; i < 11;) {
 
-        int idx = rand() % equipo2->getCantidadJugadores();
+        uniform_int_distribution<> dist(0, equipo2->getCantidadJugadores() - 1);
+        int idx = dist(gen);
 
         if (!usados2[idx]) {
             convocadosEquipo2[i] = equipo2->getJugador(idx);
@@ -125,19 +140,18 @@ void Partido::convocarJugadores() {
         }
     }
 }
-void Partido::simularEventos(Jugador **jugadores, int golesEquipo,
-                             int *goleadores, int &cantGoleadores,
-                             const string &nombreEquipo) {
+void Partido::simularEventos(Jugador **jugadores, int golesEquipo,int *goleadores, int &cantGoleadores,const string &nombreEquipo) {
+    uniform_real_distribution<> dist(0.0, 1.0);
 
     for (int i = 0; i < 11; i++) {
 
         int amarillas = 0;
 
-        float r = (float)rand() / RAND_MAX;
+        float r = dist(gen);
         if (r < 0.06)
             amarillas++;
 
-        r = (float)rand() / RAND_MAX;
+        r = dist(gen);
         if (amarillas == 1 && r < 0.0115)
             amarillas++;
 
@@ -145,15 +159,15 @@ void Partido::simularEventos(Jugador **jugadores, int golesEquipo,
 
         int faltas = 0;
 
-        r = (float)rand() / RAND_MAX;
+        r = dist(gen);
         if (r < 0.13)
             faltas++;
 
-        r = (float)rand() / RAND_MAX;
+        r = dist(gen);
         if (faltas == 1 && r < 0.0275)
             faltas++;
 
-        r = (float)rand() / RAND_MAX;
+        r = dist(gen);
         if (faltas == 2 && r < 0.007)
             faltas++;
 
@@ -176,7 +190,7 @@ void Partido::simularEventos(Jugador **jugadores, int golesEquipo,
 
         for (int i = 0; i < 11 && golesAsignados < golesEquipo; i++) {
 
-            float r = (float)rand() / RAND_MAX;
+            float r = dist(gen);
 
             if (r < 0.04) {
 
@@ -276,14 +290,27 @@ void Partido::setGoles(int g1, int g2) {
 Partido &Partido::operator=(const Partido &otro) {
 
     if (this != &otro) {
+
+        delete[] convocadosEquipo1;
+        delete[] convocadosEquipo2;
+
         equipo1 = otro.equipo1;
         equipo2 = otro.equipo2;
         fecha = otro.fecha;
         hora = otro.hora;
         sede = otro.sede;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++)
             arbitros[i] = otro.arbitros[i];
+
+        cantidadConvocados = otro.cantidadConvocados;
+
+        convocadosEquipo1 = new Jugador*[11];
+        convocadosEquipo2 = new Jugador*[11];
+
+        for (int i = 0; i < 11; i++) {
+            convocadosEquipo1[i] = otro.convocadosEquipo1[i];
+            convocadosEquipo2[i] = otro.convocadosEquipo2[i];
         }
     }
 

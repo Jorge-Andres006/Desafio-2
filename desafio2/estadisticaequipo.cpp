@@ -17,11 +17,12 @@ EstadisticaEquipo::EstadisticaEquipo(const EstadisticaEquipo &copia) {
     partidosGanados = copia.partidosGanados;
     partidosEmpatados = copia.partidosEmpatados;
     partidosPerdidos = copia.partidosPerdidos;
+    minutosJugados = copia.minutosJugados;
 }
 
 EstadisticaEquipo::~EstadisticaEquipo() {}
 
-int EstadisticaEquipo::getGolesFavor() { return golesFavor; }
+int EstadisticaEquipo::getGolesFavor()  { return golesFavor; }
 int EstadisticaEquipo::getGolesContra() { return golesContra; }
 int EstadisticaEquipo::getPartidosGanados() { return partidosGanados; }
 int EstadisticaEquipo::getPartidosEmpatados() { return partidosEmpatados; }
@@ -65,6 +66,7 @@ EstadisticaEquipo &EstadisticaEquipo::operator=(const EstadisticaEquipo &otro) {
         partidosGanados = otro.partidosGanados;
         partidosEmpatados = otro.partidosEmpatados;
         partidosPerdidos = otro.partidosPerdidos;
+        minutosJugados = otro.minutosJugados;
     }
     return *this;
 }

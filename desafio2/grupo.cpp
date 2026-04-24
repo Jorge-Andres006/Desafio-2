@@ -60,6 +60,7 @@ void Grupo::generarPartidos() {
     if (cantidadEquipos != 4)
         return;
 
+    delete[] partidos;
     cantidadPartidos = 6;
     partidos = new Partido[cantidadPartidos];
 
