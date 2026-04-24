@@ -1,27 +1,28 @@
 #ifndef JUGADOR_H
 #define JUGADOR_H
 
-#include <string>
 #include "estadisticajugador.h"
+#include <string>
 using namespace std;
 
-class Jugador{
+class Jugador {
 private:
     string nombre;
     string apellido;
-    int numero;
 
     EstadisticaJugador estadisticas;
 
-public:
-    //constructores
-    Jugador();
-    Jugador(const Jugador& copia);
+    int numero;
 
-    //destructor
+public:
+    // Constructores
+    Jugador();
+    Jugador(const Jugador &copia); // constructor copia
+
+    // Destructor
     ~Jugador();
 
-    //getters
+    // Getters
     string getNombre();
     string getApellido();
     int getNumero();
@@ -32,21 +33,22 @@ public:
     int getFaltas();
     int getAsistencias();
     int getPartidos();
-
-
-    //setters
+    EstadisticaJugador &getEstadistica();
+    // Setters
     void setNombre(const string nombre);
     void setApellido(const string apellido);
     void setNumero(int numero);
 
-    //metodos principales
-    void actualizarEstadisticas(int goles, int minutos, int amarillas, int rojas, int faltas);
+    // Operaciones principales
+    void actualizarEstadisticas(int goles, int minutos, int amarillas, int rojas,
+                                int faltas);
     void sumarPartido();
-    //despliegue
+
+    // Despliegue
     void mostrarJugador();
 
-    //sobrecarga
-    Jugador& operator=(const Jugador& otro);
+    // Sobrecarga de operador
+    Jugador &operator=(const Jugador &otro);
 };
 
-#endif
+#endif // JUGADOR_Hf

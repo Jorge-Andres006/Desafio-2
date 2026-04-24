@@ -1,7 +1,7 @@
 #ifndef ESTADISTICAJUGADOR_H
 #define ESTADISTICAJUGADOR_H
 
-class EstadisticaJugador{
+class EstadisticaJugador {
 private:
     int partidosJugados;
     int goles;
@@ -12,10 +12,14 @@ private:
     int minutosJugados;
 
 public:
+    // Constructores
     EstadisticaJugador();
-    EstadisticaJugador(const EstadisticaJugador& copia);
+    EstadisticaJugador(const EstadisticaJugador &copia); // constructor copia
+
+    // Destructor
     ~EstadisticaJugador();
 
+    // Getters
     int getPartidosJugados();
     int getGoles();
     int getMinutosJugados();
@@ -24,6 +28,7 @@ public:
     int getTarjetasRojas();
     int getFaltas();
 
+    // Setters
     void setPartidosJugados(int pj);
     void setGoles(int g);
     void setMinutosJugados(int mj);
@@ -32,11 +37,15 @@ public:
     void setTarjetasRojas(int tr);
     void setFaltas(int f);
 
+    // Operaciones principales
     void actualizar(int goles, int minutos, int amarillas, int rojas, int faltas);
     void sumarPartido();
+
+    // Despliegue
     void mostrar();
 
-    EstadisticaJugador& operator=(const EstadisticaJugador& otro);
+    // Sobrecarga de operador
+    EstadisticaJugador &operator=(const EstadisticaJugador &otro);
 };
 
-#endif
+#endif // ESTADISTICAJUGADOR_H

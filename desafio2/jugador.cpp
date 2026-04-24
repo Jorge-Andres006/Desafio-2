@@ -3,91 +3,62 @@
 #include <iostream>
 using namespace std;
 
-//constructor
-Jugador::Jugador(){
+Jugador::Jugador() {
     nombre = "";
     apellido = "";
     numero = 0;
     estadisticas = EstadisticaJugador();
 }
 
-//constructor copia
-Jugador::Jugador(const Jugador& copia){
+Jugador::Jugador(const Jugador &copia) {
     nombre = copia.nombre;
     apellido = copia.apellido;
     numero = copia.numero;
     estadisticas = copia.estadisticas;
 }
 
-//destructor
-Jugador::~Jugador(){}
+Jugador::~Jugador() {}
 
-//getters
-string Jugador::getNombre(){
-    return nombre;
-}
+string Jugador::getNombre() { return nombre; }
 
-string Jugador::getApellido(){
-    return apellido;
-}
+string Jugador::getApellido() { return apellido; }
 
-int Jugador::getNumero(){
-    return numero;
-}
+int Jugador::getNumero() { return numero; }
 
-int Jugador::getGoles(){
-    return estadisticas.getGoles();
-}
-int Jugador::getMinutos(){
-    return estadisticas.getMinutosJugados();
-}
+int Jugador::getGoles() { return estadisticas.getGoles(); }
+int Jugador::getMinutos() { return estadisticas.getMinutosJugados(); }
 
-int Jugador::getAmarillas(){
-    return estadisticas.getTarjetasAmarillas();
-}
+int Jugador::getAmarillas() { return estadisticas.getTarjetasAmarillas(); }
 
-int Jugador::getRojas(){
-    return estadisticas.getTarjetasRojas();
-}
+int Jugador::getRojas() { return estadisticas.getTarjetasRojas(); }
 
-int Jugador::getFaltas(){
-    return estadisticas.getFaltas();
-}
+int Jugador::getFaltas() { return estadisticas.getFaltas(); }
 
-int Jugador::getAsistencias(){
-    return estadisticas.getAsistencias();
-}
+int Jugador::getAsistencias() { return estadisticas.getAsistencias(); }
 
-int Jugador::getPartidos(){
-    return estadisticas.getPartidosJugados();
-}
-//setters
-void Jugador::setNombre(const string nombre){
-    this->nombre = nombre;
-}
+int Jugador::getPartidos() { return estadisticas.getPartidosJugados(); }
 
-void Jugador::setApellido(const string apellido){
-    this->apellido = apellido;
-}
+EstadisticaJugador &Jugador::getEstadistica() { return estadisticas; }
+// setters
+void Jugador::setNombre(const string nombre) { this->nombre = nombre; }
 
-void Jugador::setNumero(int numero){
-    this->numero = numero;
-}
-void Jugador::sumarPartido(){
-    estadisticas.sumarPartido();
-}
-void Jugador::actualizarEstadisticas(int goles, int minutos, int amarillas, int rojas, int faltas){
+void Jugador::setApellido(const string apellido) { this->apellido = apellido; }
+
+void Jugador::setNumero(int numero) { this->numero = numero; }
+void Jugador::sumarPartido() { estadisticas.sumarPartido(); }
+void Jugador::actualizarEstadisticas(int goles, int minutos, int amarillas,
+                                     int rojas, int faltas) {
     estadisticas.actualizar(goles, minutos, amarillas, rojas, faltas);
 }
 
-void Jugador::mostrarJugador(){
+void Jugador::mostrarJugador() {
     cout << "Nombre: " << nombre << " " << apellido << endl;
     cout << "Numero: " << numero << endl;
     estadisticas.mostrar();
 }
 
-Jugador& Jugador::operator=(const Jugador& otro){
-    if(this != &otro){
+Jugador &Jugador::operator=(const Jugador &otro) {
+    if (this != &otro) {
         nombre = otro.nombre;
         apellido = otro.apellido;
         numero = otro.numero;

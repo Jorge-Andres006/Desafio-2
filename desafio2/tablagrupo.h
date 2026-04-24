@@ -4,45 +4,45 @@
 class Equipo;
 class Grupo;
 
-class TablaGrupo{
+class TablaGrupo {
 private:
-    Grupo* grupo;
-    Equipo** equipos;
-    int* puntos;
-    int* partidosJugados;
-    int* partidosGanados;
-    int* partidosEmpatados;
-    int* partidosPerdidos;
-    int* diferenciaGol;
+    Grupo *grupo;
+    Equipo **equipos;
+    int *puntos;
+    int *partidosJugados;
+    int *partidosGanados;
+    int *partidosEmpatados;
+    int *partidosPerdidos;
+    int *diferenciaGol;
+
     int cantidad;
 
 public:
-    // constructores
-    TablaGrupo(Grupo& grupo);
-    TablaGrupo(const TablaGrupo& copia);
+    // Constructores
+    TablaGrupo(Grupo &grupo);
+    TablaGrupo(const TablaGrupo &copia); // constructor copia
 
-    // destructor
+    // Destructor
     ~TablaGrupo();
-
-    // getters
+    // Getters
     int getCantidad();
     int getPuntos(int i);
-    Equipo* getEquipo(int i);
     int getDiferenciaGol(int i);
+    Equipo *getEquipo(int i);
 
-    // métodos principales
+    // Operaciones principales
     void calcularPuntos();
     void ordenarTabla();
 
-    // despliegue
+    // Resultados de clasificacion
+    Equipo *getPrimero();
+    Equipo *getSegundo();
+
+    // Despliegue
     void mostrarTabla();
 
-    // resultados
-    Equipo* getPrimero();
-    Equipo* getSegundo();
-
-    // sobrecarga
-    TablaGrupo& operator=(const TablaGrupo& otro);
+    // Sobrecarga de operador
+    TablaGrupo &operator=(const TablaGrupo &otro);
 };
 
-#endif
+#endif // TABLAGRUPO_H

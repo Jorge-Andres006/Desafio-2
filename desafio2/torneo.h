@@ -7,38 +7,38 @@ class Grupo;
 class Partido;
 class Eliminatoria;
 
-class Torneo{
+class Torneo {
 private:
     string nombre;
     string fechaInicio;
-    int anio;
 
-    Equipo** equipos;
-    int cantidadEquipos;
+    Equipo **equipos;
+    Equipo **bombo1;
+    Equipo **bombo2;
+    Equipo **bombo3;
+    Equipo **bombo4;
 
-    Grupo* grupos;
+    Grupo *grupos;
+
     int cantidadGrupos;
-
-    Equipo** bombo1;
-    Equipo** bombo2;
-    Equipo** bombo3;
-    Equipo** bombo4;
+    int cantidadEquipos;
+    int anio;
 
     void ordenarPorRanking();
     void conformarBombos();
     bool sorteo();
-    int sortearDeBombo(Equipo** bombo, bool* usado, int tamano, Grupo& grupo);
-    bool esValido(Grupo& grupo, Equipo* equipo);
+    int sortearDeBombo(Equipo **bombo, bool *usado, int tamano, Grupo &grupo);
+    bool esValido(Grupo &grupo, Equipo *equipo);
     void asignarFechasGrupos();
 
 public:
     Torneo();
-    Torneo(const Torneo& otro);
+    Torneo(const Torneo &otro);
     ~Torneo();
 
-    Torneo& operator=(const Torneo& otro);
+    Torneo &operator=(const Torneo &otro);
 
-    void setEquipos(Equipo** equipos, int cantidad);
+    void setEquipos(Equipo **equipos, int cantidad);
     void inicializarGrupos(int cantidad);
 
     void realizarSorteo();
@@ -48,42 +48,36 @@ public:
     void mostrarTablasGrupos();
     void mostrarBombos();
 
-    Grupo* getGrupos();
+    Grupo *getGrupos();
     int getCantidadGrupos();
 
-    void obtenerClasificados(
-        Equipo**& equiposPrimeros,
-        Equipo**& equiposSegundos,
-        Equipo**& equiposTerceros,
-        char*& grupoPrimeros,
-        char*& grupoSegundos,
-        char*& grupoTerceros
-        );
+    void obtenerClasificados(Equipo **&equiposPrimeros, Equipo **&equiposSegundos,
+                             Equipo **&equiposTerceros, char *&grupoPrimeros,
+                             char *&grupoSegundos, char *&grupoTerceros);
 
-    void ordenarTerceros(
-        Equipo** equiposTerceros,
-        int* puntos,
-        int* diferenciaGol,
-        int* golesFavor,
-        char* grupos
-        );
+    void ordenarTerceros(Equipo **equiposTerceros, int *puntos,
+                         int *diferenciaGol, int *golesFavor, char *grupos);
 
-    void seleccionarMejoresTerceros(
-        Equipo** equiposTerceros,
-        char* gruposTerceros,
-        Equipo**& mejoresTerceros,
-        char*& gruposMejores
-        );
+    void seleccionarMejoresTerceros(Equipo **equiposTerceros,
+                                    char *gruposTerceros,
+                                    Equipo **&mejoresTerceros,
+                                    char *&gruposMejores);
 
-    void ordenarSegundos(
-        Equipo** equiposSegundos,
-        int* puntos,
-        int* diferenciaGol,
-        int* golesFavor,
-        char* grupos
-        );
+    void ordenarSegundos(Equipo **equiposSegundos, int *puntos,
+                         int *diferenciaGol, int *golesFavor, char *grupos);
 
-   Eliminatoria generarDieciseisavos();
+    Eliminatoria generarDieciseisavos();
+
+    void mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
+                             Equipo **campeon, Equipo **ganadores16, int cant16,
+                             Equipo **ganadores8, int cant8, Equipo **ganadores4,
+                             int cant4);
+
+    void mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
+                             Equipo **campeon, Equipo **perdedoresFinal,
+                             Equipo **perdedoresSemis, Equipo **ganadores16,
+                             int cant16, Equipo **ganadores8, int cant8,
+                             Equipo **ganadores4, int cant4);
 };
 
 #endif

@@ -4,36 +4,43 @@
 class Equipo;
 class Partido;
 
-class Grupo{
+class Grupo {
 private:
-    char letra;
+    Equipo **equipos;
+    Partido *partidos;
 
-    Equipo** equipos;
     int cantidadEquipos;
-
-    Partido* partidos;
     int cantidadPartidos;
 
-public:
-    Grupo();
-    Grupo(const Grupo& copia);
-    ~Grupo();
+    char letra;
 
+public:
+    // Constructores
+    Grupo();
+    Grupo(const Grupo &copia); // constructor copia
+
+    // Destructor
+    ~Grupo(); // libera equipos[] y partidos[]
+
+    // Getters
     char getLetra();
     int getCantidadEquipos();
+    int getCantidadPartidos();
+    Equipo **getEquipos();
+    Partido *getPartidos();
 
+    // Setters
     void setLetra(char letra);
 
-    void agregarEquipo(Equipo* equipo);
+    // Operaciones principales
+    void agregarEquipo(Equipo *equipo);
     void generarPartidos();
 
-    Equipo** getEquipos();
-    int getCantidadPartidos();
-    Partido* getPartidos();
-
+    // Despliegue
     void mostrarGrupo();
 
-    Grupo& operator=(const Grupo& otro);
+    // Sobrecarga de operador
+    Grupo &operator=(const Grupo &otro);
 };
 
-#endif
+#endif // GRUPO_H

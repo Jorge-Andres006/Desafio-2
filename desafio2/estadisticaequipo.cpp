@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-EstadisticaEquipo::EstadisticaEquipo(){
+EstadisticaEquipo::EstadisticaEquipo() {
     golesFavor = 0;
     golesContra = 0;
     partidosGanados = 0;
@@ -11,7 +11,7 @@ EstadisticaEquipo::EstadisticaEquipo(){
     minutosJugados = 0;
 }
 
-EstadisticaEquipo::EstadisticaEquipo(const EstadisticaEquipo& copia){
+EstadisticaEquipo::EstadisticaEquipo(const EstadisticaEquipo &copia) {
     golesFavor = copia.golesFavor;
     golesContra = copia.golesContra;
     partidosGanados = copia.partidosGanados;
@@ -19,46 +19,47 @@ EstadisticaEquipo::EstadisticaEquipo(const EstadisticaEquipo& copia){
     partidosPerdidos = copia.partidosPerdidos;
 }
 
-EstadisticaEquipo::~EstadisticaEquipo(){}
+EstadisticaEquipo::~EstadisticaEquipo() {}
 
-int EstadisticaEquipo::getGolesFavor(){ return golesFavor; }
-int EstadisticaEquipo::getGolesContra(){ return golesContra; }
-int EstadisticaEquipo::getPartidosGanados(){ return partidosGanados; }
-int EstadisticaEquipo::getPartidosEmpatados(){ return partidosEmpatados; }
-int EstadisticaEquipo::getPartidosPerdidos(){ return partidosPerdidos; }
+int EstadisticaEquipo::getGolesFavor() { return golesFavor; }
+int EstadisticaEquipo::getGolesContra() { return golesContra; }
+int EstadisticaEquipo::getPartidosGanados() { return partidosGanados; }
+int EstadisticaEquipo::getPartidosEmpatados() { return partidosEmpatados; }
+int EstadisticaEquipo::getPartidosPerdidos() { return partidosPerdidos; }
 
-void EstadisticaEquipo::setGolesFavor(int gf){ golesFavor = gf; }
-void EstadisticaEquipo::setGolesContra(int gc){ golesContra = gc; }
-void EstadisticaEquipo::setPartidosGanados(int pg){ partidosGanados = pg; }
-void EstadisticaEquipo::setPartidosEmpatados(int pe){ partidosEmpatados = pe; }
-void EstadisticaEquipo::setPartidosPerdidos(int pp){ partidosPerdidos = pp; }
+void EstadisticaEquipo::setGolesFavor(int gf) { golesFavor = gf; }
+void EstadisticaEquipo::setGolesContra(int gc) { golesContra = gc; }
+void EstadisticaEquipo::setPartidosGanados(int pg) { partidosGanados = pg; }
+void EstadisticaEquipo::setPartidosEmpatados(int pe) { partidosEmpatados = pe; }
+void EstadisticaEquipo::setPartidosPerdidos(int pp) { partidosPerdidos = pp; }
 
-void EstadisticaEquipo::actualizar(int gf,int gc,int resultado){
+void EstadisticaEquipo::actualizar(int gf, int gc, int resultado) {
     golesFavor += gf;
     golesContra += gc;
 
-    if(resultado == 1){
+    if (resultado == 1) {
         partidosGanados++;
-    } else if(resultado == 0){
+    } else if (resultado == 0) {
         partidosEmpatados++;
-    } else if(resultado == -1){
+    } else if (resultado == -1) {
         partidosPerdidos++;
     }
 }
 
-void EstadisticaEquipo::sumarMinutosJugados(int minutos){
+void EstadisticaEquipo::sumarMinutosJugados(int minutos) {
     minutosJugados += minutos;
 }
 
-void EstadisticaEquipo::mostrar(){
-    cout << "Goles a favor: " << golesFavor << " Goles en contra: " << golesContra << endl;
+void EstadisticaEquipo::mostrar() {
+    cout << "Goles a favor: " << golesFavor << " Goles en contra: " << golesContra
+         << endl;
     cout << "Partidos ganados: " << partidosGanados
          << " Partidos empatados: " << partidosEmpatados
          << " Partidos perdidos: " << partidosPerdidos << endl;
 }
 
-EstadisticaEquipo& EstadisticaEquipo::operator=(const EstadisticaEquipo& otro){
-    if(this != &otro){
+EstadisticaEquipo &EstadisticaEquipo::operator=(const EstadisticaEquipo &otro) {
+    if (this != &otro) {
         golesFavor = otro.golesFavor;
         golesContra = otro.golesContra;
         partidosGanados = otro.partidosGanados;

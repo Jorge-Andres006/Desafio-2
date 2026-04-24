@@ -3,85 +3,91 @@
 #include <iostream>
 using namespace std;
 
-Equipo::Equipo(){
-    pais="";
-    confederacion="";
-    federacion="";
-    directorTecnico="";
-    ranking=0;
+Equipo::Equipo() {
+    pais = "";
+    confederacion = "";
+    federacion = "";
+    directorTecnico = "";
+    ranking = 0;
     estadisticas = EstadisticaEquipo();
-    jugadores=nullptr;
-    cantidadJugadores=0;
+    jugadores = nullptr;
+    cantidadJugadores = 0;
 }
 
-Equipo::Equipo(const Equipo& copia){
-    pais=copia.pais;
-    confederacion=copia.confederacion;
-    federacion=copia.federacion;
-    directorTecnico=copia.directorTecnico;
-    ranking=copia.ranking;
+Equipo::Equipo(const Equipo &copia) {
+    pais = copia.pais;
+    confederacion = copia.confederacion;
+    federacion = copia.federacion;
+    directorTecnico = copia.directorTecnico;
+    ranking = copia.ranking;
     estadisticas = copia.estadisticas;
 
-    cantidadJugadores=copia.cantidadJugadores;
+    cantidadJugadores = copia.cantidadJugadores;
 
-    if(cantidadJugadores>0){
-        jugadores=new Jugador[cantidadJugadores];
-        for(int i=0;i<cantidadJugadores;i++){
-            jugadores[i]=copia.jugadores[i];
+    if (cantidadJugadores > 0) {
+        jugadores = new Jugador[cantidadJugadores];
+        for (int i = 0; i < cantidadJugadores; i++) {
+            jugadores[i] = copia.jugadores[i];
         }
     } else {
-        jugadores=nullptr;
+        jugadores = nullptr;
     }
 }
 
-Equipo::~Equipo(){
-    delete[] jugadores;
-}
+Equipo::~Equipo() { delete[] jugadores; }
 
-//getters
-string Equipo::getPais(){ return pais; }
-int Equipo::getRanking(){ return ranking; }
-string Equipo::getDirectorTecnico(){ return directorTecnico; }
-string Equipo::getConfederacion(){ return confederacion; }
+// getters
+string Equipo::getPais() { return pais; }
+int Equipo::getRanking() { return ranking; }
+string Equipo::getDirectorTecnico() { return directorTecnico; }
+string Equipo::getConfederacion() { return confederacion; }
 
-Jugador* Equipo::getJugador(int indice){
-    if(indice>=0 && indice<cantidadJugadores){
+Jugador *Equipo::getJugador(int indice) {
+    if (indice >= 0 && indice < cantidadJugadores) {
         return &jugadores[indice];
     }
     return nullptr;
 }
 
-int Equipo::getCantidadJugadores(){
-    return cantidadJugadores;
+int Equipo::getCantidadJugadores() { return cantidadJugadores; }
+string Equipo::getFederacion() { return federacion; }
+
+// setters
+void Equipo::setPais(const string &pais) { this->pais = pais; }
+void Equipo::setConfederacion(const string &confederacion) {
+    this->confederacion = confederacion;
+}
+void Equipo::setDirectorTecnico(const string &dt) {
+    this->directorTecnico = dt;
+}
+void Equipo::setRanking(int ranking) { this->ranking = ranking; }
+void Equipo::setFederacion(const string &federacion) {
+    this->federacion = federacion;
 }
 
-//setters
-void Equipo::setPais(const string& pais){ this->pais=pais; }
-void Equipo::setConfederacion(const string& confederacion){ this->confederacion=confederacion; }
-void Equipo::setDirectorTecnico(const string& dt){ this->directorTecnico=dt; }
-void Equipo::setRanking(int ranking){ this->ranking=ranking; }
-void Equipo::setFederacion(const string& federacion){ this->federacion=federacion; }
+// metodos
+void Equipo::agregarJugador(const Jugador &jugador) {
+    Jugador *nuevo = new Jugador[cantidadJugadores + 1];
 
-//metodos
-void Equipo::agregarJugador(const Jugador& jugador){
-    Jugador* nuevo=new Jugador[cantidadJugadores+1];
-
-    for(int i=0;i<cantidadJugadores;i++){
-        nuevo[i]=jugadores[i];
+    for (int i = 0; i < cantidadJugadores; i++) {
+        nuevo[i] = jugadores[i];
     }
 
-    nuevo[cantidadJugadores]=jugador;
+    nuevo[cantidadJugadores] = jugador;
 
     delete[] jugadores;
-    jugadores=nuevo;
+    jugadores = nuevo;
     cantidadJugadores++;
 }
 
-void Equipo::actualizarEstadisticas(int golesFavor,int golesContra,int resultado){
-    estadisticas.actualizar(golesFavor,golesContra,resultado);
+void Equipo::actualizarEstadisticas(int golesFavor, int golesContra,
+                                    int resultado) {
+    estadisticas.actualizar(golesFavor, golesContra, resultado);
 }
 
-void Equipo::cargarEstadisticas(int golesFavor,int golesContra,int partidosGanados,int partidosEmpatados,int partidosPerdidos){
+void Equipo::cargarEstadisticas(int golesFavor, int golesContra,
+                                int partidosGanados, int partidosEmpatados,
+                                int partidosPerdidos) {
     estadisticas.setGolesFavor(golesFavor);
     estadisticas.setGolesContra(golesContra);
     estadisticas.setPartidosGanados(partidosGanados);
@@ -89,7 +95,7 @@ void Equipo::cargarEstadisticas(int golesFavor,int golesContra,int partidosGanad
     estadisticas.setPartidosPerdidos(partidosPerdidos);
 }
 
-void Equipo::mostrarEquipo(){
+void Equipo::mostrarEquipo() {
     cout << "Direccion en memoria: " << this << endl;
     cout << "Pais: " << pais << endl;
     cout << "Ranking: " << ranking << endl;
@@ -97,29 +103,31 @@ void Equipo::mostrarEquipo(){
     cout << "Director Tecnico: " << directorTecnico << endl;
     estadisticas.mostrar();
 }
-float Equipo::getPromedioGolesFavor(){
+float Equipo::getPromedioGolesFavor() {
 
-    int partidosJugados = estadisticas.getPartidosGanados()
-    + estadisticas.getPartidosEmpatados()
-        + estadisticas.getPartidosPerdidos();
+    int partidosJugados = estadisticas.getPartidosGanados() +
+                          estadisticas.getPartidosEmpatados() +
+                          estadisticas.getPartidosPerdidos();
 
-    if(partidosJugados == 0) return 1.0;
+    if (partidosJugados == 0)
+        return 1.0;
 
     return (float)estadisticas.getGolesFavor() / partidosJugados;
 }
 
-float Equipo::getPromedioGolesContra(){
+float Equipo::getPromedioGolesContra() {
 
-    int partidosJugados = estadisticas.getPartidosGanados()
-    + estadisticas.getPartidosEmpatados()
-        + estadisticas.getPartidosPerdidos();
+    int partidosJugados = estadisticas.getPartidosGanados() +
+                          estadisticas.getPartidosEmpatados() +
+                          estadisticas.getPartidosPerdidos();
 
-    if(partidosJugados == 0) return 1.0;
+    if (partidosJugados == 0)
+        return 1.0;
 
     return (float)estadisticas.getGolesContra() / partidosJugados;
 }
-Equipo& Equipo::operator=(const Equipo& otro){
-    if(this != &otro){
+Equipo &Equipo::operator=(const Equipo &otro) {
+    if (this != &otro) {
         pais = otro.pais;
         confederacion = otro.confederacion;
         federacion = otro.federacion;
@@ -131,9 +139,9 @@ Equipo& Equipo::operator=(const Equipo& otro){
 
         cantidadJugadores = otro.cantidadJugadores;
 
-        if(cantidadJugadores > 0){
+        if (cantidadJugadores > 0) {
             jugadores = new Jugador[cantidadJugadores];
-            for(int i = 0; i < cantidadJugadores; i++){
+            for (int i = 0; i < cantidadJugadores; i++) {
                 jugadores[i] = otro.jugadores[i];
             }
         } else {
@@ -144,10 +152,6 @@ Equipo& Equipo::operator=(const Equipo& otro){
     return *this;
 }
 
-int Equipo::getGolesFavor(){
-    return estadisticas.getGolesFavor();
-}
+int Equipo::getGolesFavor() { return estadisticas.getGolesFavor(); }
 
-EstadisticaEquipo& Equipo::getEstadistica(){
-    return estadisticas;
-}
+EstadisticaEquipo &Equipo::getEstadistica() { return estadisticas; }
