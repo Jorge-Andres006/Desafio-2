@@ -53,7 +53,36 @@ int contarLineas(const string nombreArchivo) {
     archivo.close();
     return contador;
 }
+void guardarEquiposCSV(const string &nombreArchivo,
+                       Equipo *equipos,
+                       int cantidadEquipos) {
 
+    ofstream archivo(nombreArchivo);
+
+    if (!archivo.is_open()) {
+        cout << "Error al crear el archivo" << endl;
+        return;
+    }
+
+    archivo << "pais;confederacion;ranking;gf;gc;pg;pe;pp\n";
+
+    for (int i = 0; i < cantidadEquipos; i++) {
+
+        EstadisticaEquipo &est = equipos[i].getEstadistica();
+
+        archivo << equipos[i].getPais() << ";"
+                << equipos[i].getConfederacion() << ";"
+                << equipos[i].getRanking() << ";"
+                << est.getGolesFavor() << ";"
+                << est.getGolesContra() << ";"
+                << est.getPartidosGanados() << ";"
+                << est.getPartidosEmpatados() << ";"
+                << est.getPartidosPerdidos()
+                << "\n";
+    }
+
+    archivo.close();
+}
 void guardarJugadoresCSV(const string &nombreArchivo, Equipo *equipos,
                          int cantidadEquipos) {
 

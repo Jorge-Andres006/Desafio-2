@@ -45,9 +45,9 @@ Eliminatoria &Eliminatoria::operator=(const Eliminatoria &otra) {
     return *this;
 }
 
-int Eliminatoria::getCantidad() { return cantidad; }
+int Eliminatoria::getCantidad() const { return cantidad; }
 
-Partido *Eliminatoria::getPartidos() { return partidos; }
+Partido *Eliminatoria::getPartidos() const { return partidos; }
 
 bool Eliminatoria::mismoGrupo(char g1, char g2) { return g1 == g2; }
 
@@ -193,20 +193,23 @@ Equipo *Eliminatoria::simularPartidoEliminatoria(Partido &partido) {
 
     partido.setGoles(goles1, goles2);
 
-    cout << ">> Resultado final: " << partido.getEquipo1()->getPais() << " "
-         << goles1 << " - " << goles2 << " " << partido.getEquipo2()->getPais()
+    cout << ">> Resultado final: "
+         << partido.getEquipo1()->getPais() << " "
+         << goles1 << " - " << goles2 << " "
+         << partido.getEquipo2()->getPais()
          << " (prorroga)\n";
+
+    Jugador **conv1 = partido.getConvocadosEquipo1();
+    Jugador **conv2 = partido.getConvocadosEquipo2();
 
     for (int i = 0; i < 11; i++) {
 
-        Jugador *j1 = partido.getEquipo1()->getJugador(i);
-        if (j1 != nullptr) {
-            j1->actualizarEstadisticas(0, 30, 0, 0, 0);
+        if (conv1[i] != nullptr) {
+            conv1[i]->actualizarEstadisticas(0, 30, 0, 0, 0);
         }
 
-        Jugador *j2 = partido.getEquipo2()->getJugador(i);
-        if (j2 != nullptr) {
-            j2->actualizarEstadisticas(0, 30, 0, 0, 0);
+        if (conv2[i] != nullptr) {
+            conv2[i]->actualizarEstadisticas(0, 30, 0, 0, 0);
         }
     }
 
@@ -264,7 +267,7 @@ Eliminatoria Eliminatoria::crearSiguienteRonda(Equipo **equipos,
     return nueva;
 }
 
-void Eliminatoria::mostrar() {
+void Eliminatoria::mostrar() const {
 
     cout << "\n===== DIECISEISAVOS =====\n";
 

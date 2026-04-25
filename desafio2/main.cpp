@@ -1,6 +1,7 @@
 #include "InicializarDatos.h"
 #include "equipo.h"
 #include "torneo.h"
+#include "cargarArchivos.h"
 using namespace std;
 
 int main() {
@@ -24,6 +25,7 @@ int main() {
     torneo.mostrarGrupos();
     torneo.simularTorneo();
 
-
+    guardarEquiposCSV("equipos_post.csv", equiposPlano, cantidad);
+    guardarJugadoresCSV("jugadores_post.csv", equiposPlano, cantidad);
     return 0;
 }

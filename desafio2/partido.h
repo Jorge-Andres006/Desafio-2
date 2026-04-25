@@ -55,6 +55,8 @@ public:
     string getArbitro(int i);
     int getGolesEquipo1();
     int getGolesEquipo2();
+    Jugador **getConvocadosEquipo1();
+    Jugador **getConvocadosEquipo2();
 
     // Setters
     void setFecha(const string &fecha);

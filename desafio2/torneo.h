@@ -59,12 +59,12 @@ public:
     void realizarSorteo();
     void simularTorneo();
 
-    void mostrarGrupos();
-    void mostrarTablasGrupos();
-    void mostrarBombos();
+    void mostrarGrupos() const;
+    void mostrarTablasGrupos()const;
+    void mostrarBombos()const;
 
-    Grupo *getGrupos();
-    int getCantidadGrupos();
+    Grupo *getGrupos() const;
+    int getCantidadGrupos() const;
 
     void obtenerClasificados(Equipo **&equiposPrimeros, Equipo **&equiposSegundos,
                              Equipo **&equiposTerceros, char *&grupoPrimeros,

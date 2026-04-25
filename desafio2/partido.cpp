@@ -54,7 +54,8 @@ string Partido::getHora() { return hora; }
 string Partido::getSede() { return sede; }
 int Partido::getGolesEquipo1() { return golesEquipo1; }
 int Partido::getGolesEquipo2() { return golesEquipo2; }
-
+Jugador **Partido::getConvocadosEquipo1() { return convocadosEquipo1;}
+Jugador **Partido::getConvocadosEquipo2() {return convocadosEquipo2;}
 string Partido::getArbitro(int i) {
     if (i >= 0 && i < 3)
         return arbitros[i];

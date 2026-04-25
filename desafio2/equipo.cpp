@@ -37,12 +37,12 @@ Equipo::Equipo(const Equipo &copia) {
 Equipo::~Equipo() { delete[] jugadores; }
 
 // getters
-string Equipo::getPais() { return pais; }
-int Equipo::getRanking() { return ranking; }
-string Equipo::getDirectorTecnico() { return directorTecnico; }
-string Equipo::getConfederacion() { return confederacion; }
+string Equipo::getPais() const { return pais; }
+int Equipo::getRanking() const { return ranking; }
+string Equipo::getDirectorTecnico() const { return directorTecnico; }
+string Equipo::getConfederacion() const { return confederacion; }
 
-Jugador* Equipo::getJugador(int indice) {
+Jugador* Equipo::getJugador(int indice) const {
     if (jugadores == nullptr) return nullptr;
 
     if (indice >= 0 && indice < cantidadJugadores) {
@@ -51,8 +51,8 @@ Jugador* Equipo::getJugador(int indice) {
     return nullptr;
 }
 
-int Equipo::getCantidadJugadores() { return cantidadJugadores; }
-string Equipo::getFederacion() { return federacion; }
+int Equipo::getCantidadJugadores() const { return cantidadJugadores; }
+string Equipo::getFederacion() const { return federacion; }
 
 // setters
 void Equipo::setPais(const string &pais) { this->pais = pais; }

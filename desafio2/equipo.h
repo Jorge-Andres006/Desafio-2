@@ -29,13 +29,13 @@ public:
     ~Equipo(); // libera jugadores[]
 
     // Getters
-    string getPais();
-    int getRanking();
-    string getConfederacion();
-    string getDirectorTecnico();
-    string getFederacion();
-    int getCantidadJugadores();
-    Jugador *getJugador(int indice);
+    string getPais()const;
+    int getRanking()const;
+    string getConfederacion()const;
+    string getDirectorTecnico()const;
+    string getFederacion()const;
+    int getCantidadJugadores()const;
+    Jugador *getJugador(int indice) const;
     EstadisticaEquipo &getEstadistica();
     int getGolesFavor();
     float getPromedioGolesFavor();

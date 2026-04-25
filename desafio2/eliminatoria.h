@@ -19,8 +19,8 @@ public:
     ~Eliminatoria(); // libera partidos[]
 
     // Getters
-    int getCantidad();
-    Partido *getPartidos();
+    int getCantidad() const;
+    Partido *getPartidos() const;
 
     // Operaciones principales
     void agregarPartido(Equipo *equipo1, Equipo *equipo2);
@@ -36,7 +36,7 @@ public:
     Eliminatoria crearSiguienteRonda(Equipo **equipos, int cantidadEquipos);
 
     // Despliegue
-    void mostrar();
+    void mostrar() const;
 
     bool mismoGrupo(char g1, char g2);
 

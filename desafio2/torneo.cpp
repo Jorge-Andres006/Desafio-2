@@ -203,10 +203,16 @@ bool Torneo::sorteo() {
 
     return true;
 }
-void Torneo::mostrarGrupos() {
+void Torneo::mostrarGrupos() const {
     for (int i = 0; i < cantidadGrupos; i++) {
         grupos[i].mostrarGrupo();
     }
+}
+Grupo *Torneo::getGrupos() const {
+    return grupos;
+}
+int Torneo::getCantidadGrupos() const {
+    return cantidadGrupos;
 }
 void Torneo::asignarFechasGrupos() {
 
@@ -309,7 +315,7 @@ void Torneo::asignarFechasGrupos() {
         }
     }
 }
-void Torneo::mostrarTablasGrupos() {
+void Torneo::mostrarTablasGrupos() const {
 
     for (int i = 0; i < cantidadGrupos; i++) {
 
@@ -702,7 +708,7 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
 
     cout << "\n==============================================\n";
 }
-void Torneo::mostrarBombos() {
+void Torneo::mostrarBombos() const {
     cout << "====== Bombo 1 ======" << endl;
     for (int i = 0; i < 12; i++) {
         cout << bombo1[i]->getPais() << " - " << bombo1[i]->getConfederacion()
