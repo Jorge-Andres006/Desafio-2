@@ -1,29 +1,34 @@
 #include "eliminatoria.h"
+#include "cargarArchivos.h"
 #include "jugador.h"
 #include <iostream>
 #include <random>
 
 using namespace std;
+//constructor
 Eliminatoria::Eliminatoria() {
     cantidad = 0;
     partidos = nullptr;
 }
+//constructor de copia
 Eliminatoria::Eliminatoria(const Eliminatoria &otra) {
 
     cantidad = otra.cantidad;
 
     if (cantidad > 0) {
         partidos = new Partido[cantidad];
+        memoria += sizeof(Partido) * cantidad;
         for (int i = 0; i < cantidad; i++) {
+            iteraciones++;
             partidos[i] = otra.partidos[i];
         }
     } else {
         partidos = nullptr;
     }
 }
-
+//destructor
 Eliminatoria::~Eliminatoria() { delete[] partidos; }
-
+//operador de sobrecarga
 Eliminatoria &Eliminatoria::operator=(const Eliminatoria &otra) {
 
     if (this != &otra) {
@@ -34,7 +39,9 @@ Eliminatoria &Eliminatoria::operator=(const Eliminatoria &otra) {
 
         if (cantidad > 0) {
             partidos = new Partido[cantidad];
+            memoria += sizeof(Partido) * cantidad;
             for (int i = 0; i < cantidad; i++) {
+                iteraciones++;
                 partidos[i] = otra.partidos[i];
             }
         } else {
@@ -44,18 +51,19 @@ Eliminatoria &Eliminatoria::operator=(const Eliminatoria &otra) {
 
     return *this;
 }
-
+//Getters
 int Eliminatoria::getCantidad() const { return cantidad; }
-
 Partido *Eliminatoria::getPartidos() const { return partidos; }
 
+//verifica si dos equipos vienen del mismo grupo
 bool Eliminatoria::mismoGrupo(char g1, char g2) { return g1 == g2; }
-
+//agrega un nuevo partido a la eliminatoria aumentado el arreglo dinamico
 void Eliminatoria::agregarPartido(Equipo *e1, Equipo *e2) {
 
     Partido *nuevo = new Partido[cantidad + 1];
-
+     memoria += sizeof(Partido) * (cantidad + 1);
     for (int i = 0; i < cantidad; i++) {
+        iteraciones++;
         nuevo[i] = partidos[i];
     }
 
@@ -74,7 +82,7 @@ void Eliminatoria::agregarPartido(Equipo *e1, Equipo *e2) {
 
     cantidad++;
 }
-
+//crea los enfrentamiendos de la eliminatoria a partir de los equipos clasificados
 void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
                                           Equipo **equiposSegundos,
                                           Equipo **mejoresTerceros,
@@ -88,9 +96,10 @@ void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
     int idx;
 
     for (int i = 0; i < 8; i++) {
-
+        iteraciones++;
         idx = -1;
         for (int j = 0; j < 8; j++) {
+            iteraciones++;
             if (!usadosTerceros[j] &&
                 grupoMejoresTerceros[j] != grupoPrimeros[i]) {
                 idx = j;
@@ -99,6 +108,7 @@ void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
         }
         if (idx == -1) {
             for (int j = 0; j < 8; j++) {
+                iteraciones++;
                 if (!usadosTerceros[j]) {
                     idx = j;
                     break;
@@ -110,10 +120,12 @@ void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
     }
 
     for (int i = 8; i < 12; i++) {
+        iteraciones++;
 
         idx = -1;
 
         for (int j = 0; j < 12; j++) {
+            iteraciones++;
             if (!usadosSegundos[j] &&
                 grupoSegundos[j] != grupoPrimeros[i]) {
                 idx = j;
@@ -133,12 +145,12 @@ void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
         usadosSegundos[idx] = true;
     }
     for (int i = 0; i < 12; i++) {
-
+        iteraciones++;
         if (usadosSegundos[i])
             continue;
 
         for (int j = i + 1; j < 12; j++) {
-
+            iteraciones++;
             if (usadosSegundos[j])
                 continue;
 
@@ -152,6 +164,7 @@ void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
         }
         if (!usadosSegundos[i]) {
             for (int j = i + 1; j < 12; j++) {
+                iteraciones++;
                 if (!usadosSegundos[j]) {
                     agregarPartido(equiposSegundos[i], equiposSegundos[j]);
                     usadosSegundos[i] = true;
@@ -162,6 +175,7 @@ void Eliminatoria::crearDesdeClasificados(Equipo **equiposPrimeros,
         }
     }
 }
+//simula un partido eliminatorio y devuelve el equipo ganador
 Equipo *Eliminatoria::simularPartidoEliminatoria(Partido &partido) {
 
     partido.setFecha("2026-07-10");
@@ -215,7 +229,7 @@ Equipo *Eliminatoria::simularPartidoEliminatoria(Partido &partido) {
 
     return ganador;
 }
-
+//resuelve un empate usando probabilidad basada en el ranking de los equipos
 Equipo *Eliminatoria::resolverEmpate(Partido &partido) {
 
     Equipo *equipo1 = partido.getEquipo1();
@@ -243,7 +257,7 @@ Equipo *Eliminatoria::resolverEmpate(Partido &partido) {
         return equipo2;
     }
 }
-
+//crea la siguiente ronda emparejando los equipos ganadores
 Eliminatoria Eliminatoria::crearSiguienteRonda(Equipo **equipos,
                                                int cantidadEquipos) {
 
@@ -255,7 +269,7 @@ Eliminatoria Eliminatoria::crearSiguienteRonda(Equipo **equipos,
     }
 
     for (int i = 0; i < cantidadEquipos - 1; i += 2) {
-
+        iteraciones++;
         if (equipos[i] == nullptr || equipos[i + 1] == nullptr) {
             cout << "Error: equipo NULL en emparejamiento\n";
             continue;
@@ -266,17 +280,18 @@ Eliminatoria Eliminatoria::crearSiguienteRonda(Equipo **equipos,
 
     return nueva;
 }
-
+//muestra en pantalla todos los partidos de la eliminatoria
 void Eliminatoria::mostrar() const {
 
     cout << "\n===== DIECISEISAVOS =====\n";
 
     for (int i = 0; i < cantidad; i++) {
+        iteraciones++;
         cout << partidos[i].getEquipo1()->getPais() << " vs "
              << partidos[i].getEquipo2()->getPais() << endl;
     }
 }
-
+//simula toda la ronda y devuelve un arreglo con los equipos ganadores
 Equipo **Eliminatoria::simularRonda(int &cantidadGanadores,
                                     const string &nombreRonda) {
 
@@ -291,9 +306,9 @@ Equipo **Eliminatoria::simularRonda(int &cantidadGanadores,
     cantidadGanadores = cantidad;
 
     Equipo **ganadores = new Equipo *[cantidadGanadores];
-
+    memoria += sizeof(Equipo*) * cantidadGanadores;
     for (int i = 0; i < cantidad; i++) {
-
+        iteraciones++;
         if (partidos == nullptr) {
             cout << "Error: partidos NULL\n";
             ganadores[i] = nullptr;

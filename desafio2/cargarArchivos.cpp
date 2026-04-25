@@ -4,10 +4,15 @@
 #include <iostream>
 #include <string>
 using namespace std;
+//extraee un campo de una linea CSV usando ; como separador
 string obtenerCampo(const string &linea, int &inicio) {
+    memoria += sizeof(string);
+    memoria += sizeof(int*);
+    memoria += sizeof(string);
     string campo = "";
 
     while (inicio < linea.size() && linea[inicio] != ';') {
+        iteraciones++;
         campo += linea[inicio];
         inicio++;
     }
@@ -17,10 +22,14 @@ string obtenerCampo(const string &linea, int &inicio) {
 
     return campo;
 }
+//elimina caracteres de un texxto para evitar errores al leer archvios
 string limpiarTexto(const string &texto) {
+    memoria += sizeof(string);
+    memoria += sizeof(string);
     string resultado = "";
 
     for (int i = 0; i < texto.size(); i++) {
+        iteraciones++;
         if (texto[i] != '\r') {
             resultado += texto[i];
         }
@@ -28,7 +37,13 @@ string limpiarTexto(const string &texto) {
 
     return resultado;
 }
+//cuantas lineas validas que tiene un archivo CSV
 int contarLineas(const string nombreArchivo) {
+    memoria += sizeof(string);
+    memoria += sizeof(ifstream);
+    memoria += sizeof(string);
+    memoria += sizeof(int);
+    iteraciones++;
     ifstream archivo(nombreArchivo);
 
     if (!archivo) {
@@ -53,10 +68,15 @@ int contarLineas(const string nombreArchivo) {
     archivo.close();
     return contador;
 }
+//la informacion de todos los equipos en un archivo csv
 void guardarEquiposCSV(const string &nombreArchivo,
                        Equipo *equipos,
                        int cantidadEquipos) {
-
+    memoria += sizeof(string);
+    memoria += sizeof(Equipo*);
+    memoria += sizeof(int);
+    memoria += sizeof(ofstream);
+    memoria += sizeof(EstadisticaEquipo);
     ofstream archivo(nombreArchivo);
 
     if (!archivo.is_open()) {
@@ -67,7 +87,7 @@ void guardarEquiposCSV(const string &nombreArchivo,
     archivo << "pais;confederacion;ranking;gf;gc;pg;pe;pp\n";
 
     for (int i = 0; i < cantidadEquipos; i++) {
-
+        iteraciones++;
         EstadisticaEquipo &est = equipos[i].getEstadistica();
 
         archivo << equipos[i].getPais() << ";"
@@ -83,9 +103,14 @@ void guardarEquiposCSV(const string &nombreArchivo,
 
     archivo.close();
 }
+//la informacion de todos los jugadores de todos los equipos en un CSV
 void guardarJugadoresCSV(const string &nombreArchivo, Equipo *equipos,
                          int cantidadEquipos) {
-
+    memoria += sizeof(string);
+    memoria += sizeof(Equipo*);
+    memoria += sizeof(int);
+    memoria += sizeof(ofstream);
+    memoria += sizeof(Jugador*);
     ofstream archivo(nombreArchivo);
 
     if (!archivo.is_open()) {
@@ -97,9 +122,9 @@ void guardarJugadoresCSV(const string &nombreArchivo, Equipo *equipos,
                "asistencias;partidos\n";
 
     for (int i = 0; i < cantidadEquipos; i++) {
-
-        for (int j = 0; j < equipos[i].getCantidadJugadores(); j++) {
-
+        iteraciones++;
+        for (int j = 0; j < equipos[i].getCantidadJugadores(); j++){
+            iteraciones++;
             Jugador *jugador = equipos[i].getJugador(j);
 
             archivo << equipos[i].getPais() << ";" << jugador->getNombre() << ";"
@@ -113,8 +138,13 @@ void guardarJugadoresCSV(const string &nombreArchivo, Equipo *equipos,
 
     archivo.close();
 }
+//copia todo el contenido de un archivo CSV a otro archivo
 void copiarArchivoCSV(const string &origen, const string &destino) {
-
+    memoria += sizeof(string);
+    memoria += sizeof(string);
+    memoria += sizeof(ifstream);
+    memoria += sizeof(ofstream);
+    memoria += sizeof(string);
     ifstream archivoOrigen(origen);
     ofstream archivoDestino(destino);
 
@@ -126,6 +156,7 @@ void copiarArchivoCSV(const string &origen, const string &destino) {
     string linea;
 
     while (getline(archivoOrigen, linea)) {
+        iteraciones++;
         archivoDestino << linea << "\n";
     }
 

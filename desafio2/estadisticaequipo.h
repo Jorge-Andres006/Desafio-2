@@ -19,11 +19,11 @@ public:
     ~EstadisticaEquipo();
 
     // Getters
-    int getGolesFavor();
-    int getGolesContra();
-    int getPartidosGanados();
-    int getPartidosEmpatados();
-    int getPartidosPerdidos();
+    int getGolesFavor() const;
+    int getGolesContra() const;
+    int getPartidosGanados() const;
+    int getPartidosEmpatados() const;
+    int getPartidosPerdidos() const;
 
     // Setters
     void setGolesFavor(int gf);

@@ -3,7 +3,8 @@
 
 class Equipo;
 class Partido;
-
+extern long long memoria;
+extern long long iteraciones;
 class Grupo {
 private:
     Equipo **equipos;
@@ -23,11 +24,11 @@ public:
     ~Grupo(); // libera equipos[] y partidos[]
 
     // Getters
-    char getLetra();
-    int getCantidadEquipos();
-    int getCantidadPartidos();
-    Equipo **getEquipos();
-    Partido *getPartidos();
+    char getLetra() const;
+    int getCantidadEquipos() const;
+    int getCantidadPartidos() const;
+    Equipo **getEquipos() const;
+    Partido *getPartidos() const;
 
     // Setters
     void setLetra(char letra);

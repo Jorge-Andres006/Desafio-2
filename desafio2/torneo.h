@@ -7,9 +7,17 @@ class Equipo;
 class Grupo;
 class Partido;
 class Eliminatoria;
-
+extern long long memoria;
+extern long long iteraciones;
 class Torneo {
 private:
+
+    Eliminatoria dieciseisavos;
+    Eliminatoria octavos;
+    Eliminatoria cuartos;
+    Eliminatoria semis;
+    Eliminatoria final;
+
     string nombre;
     string fechaInicio;
 
@@ -26,14 +34,8 @@ private:
     Equipo **perdedoresSemis;
     Equipo **perdedoresFinal;
 
-
     Grupo *grupos;
 
-    Eliminatoria dieciseisavos;
-    Eliminatoria octavos;
-    Eliminatoria cuartos;
-    Eliminatoria semis;
-    Eliminatoria final;
     int cantidadGrupos;
     int cantidadEquipos;
     int anio;

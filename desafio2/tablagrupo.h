@@ -25,10 +25,10 @@ public:
     // Destructor
     ~TablaGrupo();
     // Getters
-    int getCantidad();
-    int getPuntos(int i);
-    int getDiferenciaGol(int i);
-    Equipo *getEquipo(int i);
+    int getCantidad()const;
+    int getPuntos(int i)const;
+    int getDiferenciaGol(int i)const;
+    Equipo *getEquipo(int i)const;
 
     // Operaciones principales
     void calcularPuntos();

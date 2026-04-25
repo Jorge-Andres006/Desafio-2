@@ -1,4 +1,5 @@
 #include "partido.h"
+#include "cargarArchivos.h"
 #include "equipo.h"
 #include "jugador.h"
 #include <cmath>
@@ -6,7 +7,7 @@
 #include <random>
 using namespace std;
 static mt19937 gen(std::random_device{}());
-
+//constructor
 Partido::Partido() {
     equipo1 = NULL;
     equipo2 = NULL;
@@ -18,16 +19,18 @@ Partido::Partido() {
 
     convocadosEquipo1 = new Jugador *[11];
     convocadosEquipo2 = new Jugador *[11];
+    memoria += sizeof(Jugador*) * 11 * 2;
 }
-
+//constructor de copia
 Partido::Partido(const Partido &copia) {
     fecha = copia.fecha;
     hora = copia.hora;
     sede = copia.sede;
 
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++){
+        iteraciones++;
         arbitros[i] = copia.arbitros[i];
-
+    }
     equipo1 = copia.equipo1;
     equipo2 = copia.equipo2;
 
@@ -35,48 +38,70 @@ Partido::Partido(const Partido &copia) {
 
     convocadosEquipo1 = new Jugador*[11];
     convocadosEquipo2 = new Jugador*[11];
-
+    memoria += sizeof(Jugador*) * 11 * 2;
     for (int i = 0; i < 11; i++) {
         convocadosEquipo1[i] = copia.convocadosEquipo1[i];
         convocadosEquipo2[i] = copia.convocadosEquipo2[i];
     }
 }
-
+//destructor
 Partido::~Partido() {
     delete[] convocadosEquipo1;
     delete[] convocadosEquipo2;
 }
-
-Equipo *Partido::getEquipo1() { return equipo1; }
-Equipo *Partido::getEquipo2() { return equipo2; }
-string Partido::getFecha() { return fecha; }
-string Partido::getHora() { return hora; }
-string Partido::getSede() { return sede; }
-int Partido::getGolesEquipo1() { return golesEquipo1; }
-int Partido::getGolesEquipo2() { return golesEquipo2; }
-Jugador **Partido::getConvocadosEquipo1() { return convocadosEquipo1;}
-Jugador **Partido::getConvocadosEquipo2() {return convocadosEquipo2;}
-string Partido::getArbitro(int i) {
+//getters
+Equipo *Partido::getEquipo1() {
+    return equipo1;
+}
+Equipo *Partido::getEquipo2() {
+    return equipo2;
+}
+string Partido::getFecha() const {
+    return fecha;
+}
+string Partido::getHora() const {
+    return hora;
+}
+string Partido::getSede() const {
+    return sede;
+}
+int Partido::getGolesEquipo1() const {
+    return golesEquipo1;
+}
+int Partido::getGolesEquipo2() const {
+    return golesEquipo2;
+}
+Jugador **Partido::getConvocadosEquipo1() {
+    return convocadosEquipo1;
+}
+Jugador **Partido::getConvocadosEquipo2() {
+    return convocadosEquipo2;
+}
+string Partido::getArbitro(int i) const {
     if (i >= 0 && i < 3)
         return arbitros[i];
     return "";
 }
-
+//Setters
 void Partido::setEquipos(Equipo *equipo1, Equipo *equipo2) {
     this->equipo1 = equipo1;
     this->equipo2 = equipo2;
 }
-
 void Partido::setHora(const string &hora) { this->hora = hora; }
-
 void Partido::setSede(const string &sede) { this->sede = sede; }
-
 void Partido::setArbitros(const string arbitros[3]) {
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++){
+        iteraciones++;
         this->arbitros[i] = arbitros[i];
+    }
+}
+void Partido::setFecha(const string &fecha) { this->fecha = fecha; }
+void Partido::setGoles(int g1, int g2) {
+    golesEquipo1 = g1;
+    golesEquipo2 = g2;
 }
 
-void Partido::setFecha(const string &fecha) { this->fecha = fecha; }
+//calcula el valor lambda para la distribucion de goles
 float Partido::calcularLambda(float gf, float gc) {
     float mu = 1.35f;
     float alpha = 0.6f;
@@ -84,6 +109,7 @@ float Partido::calcularLambda(float gf, float gc) {
 
     return mu * pow(gf / mu, alpha) * pow(gc / mu, beta);
 }
+//genera un numero aleatorio de goles usando distribucion de Poisson
 int Partido::generarPoisson(float lambda) {
 
     uniform_real_distribution<> dist(0.0, 1.0);
@@ -93,12 +119,14 @@ int Partido::generarPoisson(float lambda) {
     int k = 0;
 
     do {
+        iteraciones++;
         k++;
         p *= dist(gen);
     } while (p > L);
 
     return k - 1;
 }
+//calcula la posesion de cada equipo segun su ranking
 void Partido::calcularPosesion() {
 
     int r1 = equipo1->getRanking();
@@ -112,13 +140,14 @@ void Partido::calcularPosesion() {
     posesionEquipo1 = (inv1 / total) * 100;
     posesionEquipo2 = (inv2 / total) * 100;
 }
+//selecciona aleatoriamente los jugadores convocados para el partido
 void Partido::convocarJugadores() {
 
     bool usados1[26] = {false};
     bool usados2[26] = {false};
 
     for (int i = 0; i < 11;) {
-
+        iteraciones++;
         uniform_int_distribution<> dist(0, equipo1->getCantidadJugadores() - 1);
         int idx = dist(gen);
 
@@ -130,7 +159,7 @@ void Partido::convocarJugadores() {
     }
 
     for (int i = 0; i < 11;) {
-
+        iteraciones++;
         uniform_int_distribution<> dist(0, equipo2->getCantidadJugadores() - 1);
         int idx = dist(gen);
 
@@ -141,11 +170,12 @@ void Partido::convocarJugadores() {
         }
     }
 }
+//simula eventos del partido como tarjetas, faltas y asignacion de goles
 void Partido::simularEventos(Jugador **jugadores, int golesEquipo,int *goleadores, int &cantGoleadores,const string &nombreEquipo) {
     uniform_real_distribution<> dist(0.0, 1.0);
 
     for (int i = 0; i < 11; i++) {
-
+        iteraciones++;
         int amarillas = 0;
 
         float r = dist(gen);
@@ -188,9 +218,9 @@ void Partido::simularEventos(Jugador **jugadores, int golesEquipo,int *goleadore
     int golesAsignados = 0;
 
     while (golesAsignados < golesEquipo) {
-
+        iteraciones++;
         for (int i = 0; i < 11 && golesAsignados < golesEquipo; i++) {
-
+            iteraciones++;
             float r = dist(gen);
 
             if (r < 0.04) {
@@ -204,6 +234,7 @@ void Partido::simularEventos(Jugador **jugadores, int golesEquipo,int *goleadore
         }
     }
 }
+//actualiza las estadisticas de los equipos segun el resultado del partido
 void Partido::actualizarEquipos() {
 
     int res1, res2;
@@ -222,6 +253,7 @@ void Partido::actualizarEquipos() {
     equipo1->actualizarEstadisticas(golesEquipo1, golesEquipo2, res1);
     equipo2->actualizarEstadisticas(golesEquipo2, golesEquipo1, res2);
 }
+//Simula completamente un partido incluyendo goles, eventos y estadisticas
 void Partido::simularPartido() {
 
     convocarJugadores();
@@ -247,10 +279,12 @@ void Partido::simularPartido() {
 
     actualizarEquipos();
     for (int i = 0; i < 11; i++) {
+        iteraciones++;
         convocadosEquipo1[i]->sumarPartido();
         convocadosEquipo2[i]->sumarPartido();
     }
 }
+//muestra en pantalla toda la informacion del partido (Despligue)
 void Partido::mostrarPartido() {
 
     cout << "----------------------------------------\n";
@@ -270,24 +304,21 @@ void Partido::mostrarPartido() {
 
     cout << "Goleadores " << equipo1->getPais() << ": ";
     for (int i = 0; i < cantGoleadores1; i++) {
+        iteraciones++;
         cout << goleadoresEquipo1[i] << " ";
     }
     cout << endl;
 
     cout << "Goleadores " << equipo2->getPais() << ": ";
     for (int i = 0; i < cantGoleadores2; i++) {
+        iteraciones++;
         cout << goleadoresEquipo2[i] << " ";
     }
     cout << endl;
 
     cout << "----------------------------------------\n\n";
 }
-
-void Partido::setGoles(int g1, int g2) {
-    golesEquipo1 = g1;
-    golesEquipo2 = g2;
-}
-
+//operador de sobrecarga
 Partido &Partido::operator=(const Partido &otro) {
 
     if (this != &otro) {
@@ -301,15 +332,17 @@ Partido &Partido::operator=(const Partido &otro) {
         hora = otro.hora;
         sede = otro.sede;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++){
+            iteraciones++;
             arbitros[i] = otro.arbitros[i];
-
+        }
         cantidadConvocados = otro.cantidadConvocados;
 
         convocadosEquipo1 = new Jugador*[11];
         convocadosEquipo2 = new Jugador*[11];
-
+        memoria += sizeof(Jugador*) * 11 * 2;
         for (int i = 0; i < 11; i++) {
+            iteraciones++;
             convocadosEquipo1[i] = otro.convocadosEquipo1[i];
             convocadosEquipo2[i] = otro.convocadosEquipo2[i];
         }

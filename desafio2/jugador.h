@@ -23,16 +23,16 @@ public:
     ~Jugador();
 
     // Getters
-    string getNombre();
-    string getApellido();
-    int getNumero();
-    int getGoles();
-    int getMinutos();
-    int getAmarillas();
-    int getRojas();
-    int getFaltas();
-    int getAsistencias();
-    int getPartidos();
+    string getNombre() const;
+    string getApellido() const;
+    int getNumero() const;
+    int getGoles() const;
+    int getMinutos() const;
+    int getAmarillas() const;
+    int getRojas() const;
+    int getFaltas() const;
+    int getAsistencias() const;
+    int getPartidos() const;
     EstadisticaJugador &getEstadistica();
     // Setters
     void setNombre(const string nombre);

@@ -49,12 +49,12 @@ public:
     // Getters
     Equipo *getEquipo1();
     Equipo *getEquipo2();
-    string getFecha();
-    string getHora();
-    string getSede();
-    string getArbitro(int i);
-    int getGolesEquipo1();
-    int getGolesEquipo2();
+    string getFecha() const;
+    string getHora() const;
+    string getSede() const;
+    string getArbitro(int i) const;
+    int getGolesEquipo1() const;
+    int getGolesEquipo2() const;
     Jugador **getConvocadosEquipo1();
     Jugador **getConvocadosEquipo2();
 

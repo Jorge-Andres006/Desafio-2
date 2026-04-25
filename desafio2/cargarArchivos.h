@@ -1,8 +1,8 @@
 #ifndef CARGARARCHIVOS_H
 #define CARGARARCHIVOS_H
-
 #include "equipo.h"
-
+extern long long iteraciones;
+extern long long memoria;
 string limpiarTexto(const string &texto);
 
 int contarLineas(const string nombreArchivo);

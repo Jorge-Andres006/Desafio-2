@@ -1,8 +1,9 @@
 #include "equipo.h"
+#include "cargarArchivos.h"
 #include "jugador.h"
 #include <iostream>
 using namespace std;
-
+//constructor
 Equipo::Equipo() {
     pais = "";
     confederacion = "";
@@ -13,7 +14,7 @@ Equipo::Equipo() {
     jugadores = nullptr;
     cantidadJugadores = 0;
 }
-
+//constructor de copia
 Equipo::Equipo(const Equipo &copia) {
     pais = copia.pais;
     confederacion = copia.confederacion;
@@ -26,22 +27,31 @@ Equipo::Equipo(const Equipo &copia) {
 
     if (cantidadJugadores > 0) {
         jugadores = new Jugador[cantidadJugadores];
+        memoria += sizeof(Jugador) * cantidadJugadores;
         for (int i = 0; i < cantidadJugadores; i++) {
+            iteraciones++;
             jugadores[i] = copia.jugadores[i];
         }
     } else {
         jugadores = nullptr;
     }
 }
-
+//destructor
 Equipo::~Equipo() { delete[] jugadores; }
 
 // getters
-string Equipo::getPais() const { return pais; }
-int Equipo::getRanking() const { return ranking; }
-string Equipo::getDirectorTecnico() const { return directorTecnico; }
-string Equipo::getConfederacion() const { return confederacion; }
-
+string Equipo::getPais() const {
+    return pais;
+}
+int Equipo::getRanking() const {
+    return ranking;
+}
+string Equipo::getDirectorTecnico() const {
+    return directorTecnico;
+}
+string Equipo::getConfederacion() const {
+    return confederacion;
+}
 Jugador* Equipo::getJugador(int indice) const {
     if (jugadores == nullptr) return nullptr;
 
@@ -70,8 +80,8 @@ void Equipo::setFederacion(const string &federacion) {
 // metodos
 void Equipo::agregarJugador(const Jugador &jugador) {
     Jugador *nuevo = new Jugador[cantidadJugadores + 1];
-
     for (int i = 0; i < cantidadJugadores; i++) {
+        iteraciones++;
         nuevo[i] = jugadores[i];
     }
 
@@ -143,7 +153,9 @@ Equipo &Equipo::operator=(const Equipo &otro) {
 
         if (cantidadJugadores > 0) {
             jugadores = new Jugador[cantidadJugadores];
+            memoria += sizeof(Jugador) * cantidadJugadores;
             for (int i = 0; i < cantidadJugadores; i++) {
+                iteraciones++;
                 jugadores[i] = otro.jugadores[i];
             }
         } else {

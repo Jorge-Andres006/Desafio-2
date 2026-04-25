@@ -4,10 +4,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-
+//Carga los equipos desde un archivo csv y devuelve un arreglo dinamico
 Equipo *cargarEquipos(const string nombreArchivo, int &cantidadEquipos) {
     cantidadEquipos = contarLineas(nombreArchivo);
-
     ifstream archivo(nombreArchivo);
 
     if (!archivo) {
@@ -16,12 +15,13 @@ Equipo *cargarEquipos(const string nombreArchivo, int &cantidadEquipos) {
     }
 
     Equipo *equipos = new Equipo[cantidadEquipos];
-
+    memoria += sizeof(Equipo) * cantidadEquipos;
     string linea;
     getline(archivo, linea);
-
+    iteraciones++;
     int indiceEquipo = 0;
     while (getline(archivo, linea)) {
+        iteraciones++;
         linea = limpiarTexto(linea);
 
         if (linea == "")
@@ -38,17 +38,26 @@ Equipo *cargarEquipos(const string nombreArchivo, int &cantidadEquipos) {
 
         try {
             int rankingFifa = stoi(obtenerCampo(linea, posicion));
+            iteraciones++;
             string nombrePais = obtenerCampo(linea, posicion);
+            iteraciones++;
             string directorTecnico = obtenerCampo(linea, posicion);
+            iteraciones++;
             string nombreFederacion = obtenerCampo(linea, posicion);
+            iteraciones++;
             string nombreConfederacion = obtenerCampo(linea, posicion);
+            iteraciones++;
 
             int golesFavor = stoi(obtenerCampo(linea, posicion));
+            iteraciones++;
             int golesContra = stoi(obtenerCampo(linea, posicion));
+            iteraciones++;
             int partidosGanados = stoi(obtenerCampo(linea, posicion));
+            iteraciones++;
             int partidosEmpatados = stoi(obtenerCampo(linea, posicion));
+            iteraciones++;
             int partidosPerdidos = stoi(obtenerCampo(linea, posicion));
-
+            iteraciones++;
             equipos[indiceEquipo].setPais(nombrePais);
             equipos[indiceEquipo].setDirectorTecnico(directorTecnico);
             equipos[indiceEquipo].setConfederacion(nombreConfederacion);
@@ -69,14 +78,14 @@ Equipo *cargarEquipos(const string nombreArchivo, int &cantidadEquipos) {
     archivo.close();
     return equipos;
 }
+//inicializa jugadores para cada equipo
 void inicializarJugadoresEquipos(Equipo *equipos, int cantidadEquipos) {
 
     for (int i = 0; i < cantidadEquipos; i++) {
-
+        iteraciones++;
         for (int j = 1; j <= 26; j++) {
-
+        iteraciones++;
             Jugador jugador;
-
             jugador.setNombre("nombre" + to_string(j));
             jugador.setApellido("apellido" + to_string(j));
             jugador.setNumero(j);
@@ -88,69 +97,3 @@ void inicializarJugadoresEquipos(Equipo *equipos, int cantidadEquipos) {
     }
 }
 
-void imprimirJugadoresEquipos(Equipo *equipos, int cantidadEquipos) {
-
-    for (int i = 0; i < cantidadEquipos; i++) {
-
-        cout << "======================" << endl;
-        cout << "Equipo: " << equipos[i].getPais() << endl;
-
-        for (int j = 0; j < equipos[i].getCantidadJugadores(); j++) {
-
-            Jugador *jugador = equipos[i].getJugador(j);
-
-            cout << jugador->getNombre() << " " << jugador->getApellido() << " - "
-                 << jugador->getNumero() << endl;
-        }
-    }
-}
-
-void guardarEquipos(Equipo *equipos, int cantidadEquipos,
-                    const string &nombreArchivo) {
-
-    ofstream archivo(nombreArchivo);
-
-    archivo << "Ranking,Pais,DT,Federacion,Confederacion,GF,GC,PG,PE,PP\n";
-
-    for (int i = 0; i < cantidadEquipos; i++) {
-
-        EstadisticaEquipo &est = equipos[i].getEstadistica();
-
-        archivo << equipos[i].getRanking() << "," << equipos[i].getPais() << ","
-                << equipos[i].getDirectorTecnico() << ","
-                << equipos[i].getConfederacion() << ","
-                << equipos[i].getConfederacion() << "," << est.getGolesFavor()
-                << "," << est.getGolesContra() << "," << est.getPartidosGanados()
-                << "," << est.getPartidosEmpatados() << ","
-                << est.getPartidosPerdidos() << "\n";
-    }
-
-    archivo.close();
-}
-
-void guardarJugadores(Equipo *equipos, int cantidadEquipos,
-                      const string &nombreArchivo) {
-
-    ofstream archivo(nombreArchivo);
-
-    archivo << "Pais,Numero,Nombre,Apellido,Partidos,Goles,Asistencias,Minutos,"
-               "Amarillas,Rojas,Faltas\n";
-
-    for (int i = 0; i < cantidadEquipos; i++) {
-
-        for (int j = 0; j < equipos[i].getCantidadJugadores(); j++) {
-
-            Jugador *jugador = equipos[i].getJugador(j);
-            EstadisticaJugador &est = jugador->getEstadistica();
-
-            archivo << equipos[i].getPais() << "," << jugador->getNumero() << ","
-                    << jugador->getNombre() << "," << jugador->getApellido() << ","
-                    << est.getPartidosJugados() << "," << est.getGoles() << ","
-                    << est.getAsistencias() << "," << est.getMinutosJugados() << ","
-                    << est.getTarjetasAmarillas() << "," << est.getTarjetasRojas()
-                    << "," << est.getFaltas() << "\n";
-        }
-    }
-
-    archivo.close();
-}

@@ -20,13 +20,13 @@ public:
     ~EstadisticaJugador();
 
     // Getters
-    int getPartidosJugados();
-    int getGoles();
-    int getMinutosJugados();
-    int getAsistencias();
-    int getTarjetasAmarillas();
-    int getTarjetasRojas();
-    int getFaltas();
+    int getPartidosJugados() const;
+    int getGoles() const;
+    int getMinutosJugados() const;
+    int getAsistencias() const;
+    int getTarjetasAmarillas() const;
+    int getTarjetasRojas() const;
+    int getFaltas() const;
 
     // Setters
     void setPartidosJugados(int pj);

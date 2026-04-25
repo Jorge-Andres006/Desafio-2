@@ -1,7 +1,7 @@
 #include "estadisticaJugador.h"
 #include <iostream>
 using namespace std;
-
+//constructor
 EstadisticaJugador::EstadisticaJugador() {
     partidosJugados = 0;
     goles = 0;
@@ -11,7 +11,7 @@ EstadisticaJugador::EstadisticaJugador() {
     tarjetasRojas = 0;
     faltas = 0;
 }
-
+//constructor de copia
 EstadisticaJugador::EstadisticaJugador(const EstadisticaJugador &copia) {
     partidosJugados = copia.partidosJugados;
     goles = copia.goles;
@@ -21,27 +21,49 @@ EstadisticaJugador::EstadisticaJugador(const EstadisticaJugador &copia) {
     tarjetasRojas = copia.tarjetasRojas;
     faltas = copia.faltas;
 }
-
+//destructor
 EstadisticaJugador::~EstadisticaJugador() {}
 
-int EstadisticaJugador::getPartidosJugados() { return partidosJugados; }
-int EstadisticaJugador::getGoles() { return goles; }
-int EstadisticaJugador::getMinutosJugados() { return minutosJugados; }
-int EstadisticaJugador::getAsistencias() { return asistencias; }
-int EstadisticaJugador::getTarjetasAmarillas() { return tarjetasAmarillas; }
-int EstadisticaJugador::getTarjetasRojas() { return tarjetasRojas; }
-int EstadisticaJugador::getFaltas() { return faltas; }
-
-void EstadisticaJugador::setPartidosJugados(int pj) { partidosJugados = pj; }
-void EstadisticaJugador::setGoles(int g) { goles = g; }
-void EstadisticaJugador::setMinutosJugados(int mj) { minutosJugados = mj; }
-void EstadisticaJugador::setAsistencias(int a) { asistencias = a; }
+//getters
+int EstadisticaJugador::getPartidosJugados() const {
+    return partidosJugados;
+}
+int EstadisticaJugador::getGoles() const {
+    return goles;
+}
+int EstadisticaJugador::getMinutosJugados() const {
+    return minutosJugados;
+}
+int EstadisticaJugador::getAsistencias() const {
+    return asistencias;
+}
+int EstadisticaJugador::getTarjetasAmarillas() const {    return tarjetasAmarillas;
+}
+int EstadisticaJugador::getTarjetasRojas() const {
+    return tarjetasRojas;
+}
+int EstadisticaJugador::getFaltas() const {
+    return faltas;
+}
+//Setters
+void EstadisticaJugador::setPartidosJugados(int pj) { partidosJugados = pj;
+}
+void EstadisticaJugador::setGoles(int g) {
+    goles = g;
+}
+void EstadisticaJugador::setMinutosJugados(int mj) { minutosJugados = mj;
+}
+void EstadisticaJugador::setAsistencias(int a) {
+    asistencias = a;
+}
 void EstadisticaJugador::setTarjetasAmarillas(int ta) {
     tarjetasAmarillas = ta;
 }
 void EstadisticaJugador::setTarjetasRojas(int tr) { tarjetasRojas = tr; }
-void EstadisticaJugador::setFaltas(int f) { faltas = f; }
-
+void EstadisticaJugador::setFaltas(int f) {
+    faltas = f;
+}
+//actualiza las estadisticas segun lo que haya hecho el jugador en el partido
 void EstadisticaJugador::actualizar(int goles, int minutos, int amarillas,
                                     int rojas, int faltas) {
     this->goles += goles;
@@ -50,13 +72,15 @@ void EstadisticaJugador::actualizar(int goles, int minutos, int amarillas,
     tarjetasRojas += rojas;
     this->faltas += faltas;
 }
-void EstadisticaJugador::sumarPartido() { partidosJugados++; }
+void EstadisticaJugador::sumarPartido() {
+    partidosJugados++;
+}
+//Despliegue
 void EstadisticaJugador::mostrar() {
     cout << "Goles: " << goles << " Minutos: " << minutosJugados << endl;
 }
-
-EstadisticaJugador &
-EstadisticaJugador::operator=(const EstadisticaJugador &otro) {
+//operador de sobrecarga
+EstadisticaJugador &EstadisticaJugador::operator=(const EstadisticaJugador &otro) {
     if (this != &otro) {
         partidosJugados = otro.partidosJugados;
         goles = otro.goles;
