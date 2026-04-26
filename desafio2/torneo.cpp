@@ -38,11 +38,22 @@ Torneo::Torneo() {
 
 // destructor
 Torneo::~Torneo() {
-    delete[] bombo1;
-    delete[] bombo2;
-    delete[] bombo3;
-    delete[] bombo4;
-    delete[] grupos;
+
+    if (ganadores16) delete[] ganadores16;
+    if (ganadores8) delete[] ganadores8;
+    if (ganadores4) delete[] ganadores4;
+    if (ganadores2) delete[] ganadores2;
+    if (campeon) delete[] campeon;
+
+    if (perdedoresSemis) delete[] perdedoresSemis;
+    if (perdedoresFinal) delete[] perdedoresFinal;
+
+    if (grupos) delete[] grupos;
+
+    if (bombo1) delete[] bombo1;
+    if (bombo2) delete[] bombo2;
+    if (bombo3) delete[] bombo3;
+    if (bombo4) delete[] bombo4;
 }
 Torneo& Torneo::operator=(const Torneo &otro) {
 
@@ -108,7 +119,7 @@ void Torneo::setEquipos(Equipo **equipos, int cantidad) {
 
 void Torneo::inicializarGrupos(int cantidad) {
 
-    delete[] grupos;
+    if (grupos) delete[] grupos;
 
     cantidadGrupos = cantidad;
     grupos = new Grupo[cantidadGrupos];
@@ -832,7 +843,14 @@ void Torneo::mostrarInformeFinal() {
 }
 
 void Torneo::simularTorneo() {
+    if (ganadores16) { delete[] ganadores16; ganadores16 = nullptr; }
+    if (ganadores8)  { delete[] ganadores8;  ganadores8  = nullptr; }
+    if (ganadores4)  { delete[] ganadores4;  ganadores4  = nullptr; }
+    if (ganadores2)  { delete[] ganadores2;  ganadores2  = nullptr; }
+    if (campeon)     { delete[] campeon;     campeon     = nullptr; }
 
+    if (perdedoresSemis) { delete[] perdedoresSemis; perdedoresSemis = nullptr; }
+    if (perdedoresFinal) { delete[] perdedoresFinal; perdedoresFinal = nullptr; }
     cout << "Inicio simulacion" << endl;
 
     for (int i = 0; i < cantidadGrupos; i++) {
