@@ -21,6 +21,8 @@ add_executable(desafio2 main.cpp
     tablagrupo.h tablagrupo.cpp
     InicializarDatos.h
     inicializarDatos.cpp
+    menu.h
+    menu.cpp
 )
 
 include(GNUInstallDirs)

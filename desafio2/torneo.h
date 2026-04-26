@@ -85,11 +85,6 @@ public:
 
     Eliminatoria generarDieciseisavos();
 
-    void mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
-                             Equipo **campeon, Equipo **perdedoresFinal,
-                             Equipo **perdedoresSemis, Equipo **ganadores16,
-                             int cant16, Equipo **ganadores8, int cant8,
-                             Equipo **ganadores4, int cant4);
+    void mostrarInformeFinal();
 };
-
 #endif

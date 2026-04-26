@@ -19,13 +19,21 @@ int aleatorio(int limite) {
 
 // constructor
 Torneo::Torneo() {
-    equipos = NULL;
+    equipos = nullptr;
     cantidadEquipos = 0;
 
-    grupos = NULL;
+    grupos = nullptr;
     cantidadGrupos = 0;
 
-    bombo1 = bombo2 = bombo3 = bombo4 = NULL;
+    bombo1 = bombo2 = bombo3 = bombo4 = nullptr;
+
+    ganadores16 = nullptr;
+    ganadores8 = nullptr;
+    ganadores4 = nullptr;
+    ganadores2 = nullptr;
+    campeon = nullptr;
+    perdedoresSemis = nullptr;
+    perdedoresFinal = nullptr;
 }
 
 // destructor
@@ -36,7 +44,62 @@ Torneo::~Torneo() {
     delete[] bombo4;
     delete[] grupos;
 }
+Torneo& Torneo::operator=(const Torneo &otro) {
 
+    if (this != &otro) {
+
+        if (grupos) delete[] grupos;
+
+        if (ganadores16) delete[] ganadores16;
+        if (ganadores8) delete[] ganadores8;
+        if (ganadores4) delete[] ganadores4;
+        if (ganadores2) delete[] ganadores2;
+        if (campeon) delete[] campeon;
+        if (perdedoresSemis) delete[] perdedoresSemis;
+        if (perdedoresFinal) delete[] perdedoresFinal;
+
+        equipos = otro.equipos;
+        cantidadEquipos = otro.cantidadEquipos;
+
+        nombre = otro.nombre;
+        fechaInicio = otro.fechaInicio;
+        anio = otro.anio;
+
+        cantidadGrupos = otro.cantidadGrupos;
+
+        if (cantidadGrupos > 0) {
+            grupos = new Grupo[cantidadGrupos];
+            for (int i = 0; i < cantidadGrupos; i++) {
+                grupos[i] = otro.grupos[i];
+            }
+        } else {
+            grupos = nullptr;
+        }
+
+        bombo1 = nullptr;
+        bombo2 = nullptr;
+        bombo3 = nullptr;
+        bombo4 = nullptr;
+
+        dieciseisavos = otro.dieciseisavos;
+        octavos = otro.octavos;
+        cuartos = otro.cuartos;
+        semis = otro.semis;
+        final = otro.final;
+
+        ganadores16 = nullptr;
+        ganadores8 = nullptr;
+        ganadores4 = nullptr;
+        ganadores2 = nullptr;
+        campeon = nullptr;
+        perdedoresSemis = nullptr;
+        perdedoresFinal = nullptr;
+
+        cant16 = cant8 = cant4 = cant2 = cant1 = 0;
+    }
+
+    return *this;
+}
 // set equipos
 void Torneo::setEquipos(Equipo **equipos, int cantidad) {
     this->equipos = equipos;
@@ -639,16 +702,12 @@ void contarConf(Equipo **lista, int cant) {
 
     cout << mejor << " (" << max << ")";
 }
-void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
-                                 Equipo **campeon, Equipo **perdedoresFinal,
-                                 Equipo **perdedoresSemis, Equipo **ganadores16,
-                                 int cant16, Equipo **ganadores8, int cant8,
-                                 Equipo **ganadores4, int cant4) {
+void Torneo::mostrarInformeFinal() {
 
     cout << "\n================ INFORME FINAL ================\n";
 
     if (!campeon || !campeon[0]) {
-        cout << "Error: campeon invalido\n";
+        cout << "Primero debes simular el torneo\n";
         return;
     }
 
@@ -668,8 +727,10 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
     }
 
     Jugador *maxCampeon = nullptr;
+    memoria += sizeof(Jugador*);
 
     for (int i = 0; i < campeon[0]->getCantidadJugadores(); i++) {
+        iteraciones++;
         Jugador *j = campeon[0]->getJugador(i);
         if (!j) continue;
 
@@ -688,12 +749,17 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
     }
 
     Jugador *top1 = nullptr, *top2 = nullptr, *top3 = nullptr;
+    memoria += sizeof(Jugador*) * 3;
+
     Equipo *eq1 = nullptr, *eq2 = nullptr, *eq3 = nullptr;
+    memoria += sizeof(Equipo*) * 3;
 
     for (int i = 0; i < cantidadEquipos; i++) {
+        iteraciones++;
         if (!equipos[i]) continue;
 
         for (int j = 0; j < equipos[i]->getCantidadJugadores(); j++) {
+            iteraciones++;
             Jugador *act = equipos[i]->getJugador(j);
             if (!act) continue;
 
@@ -730,8 +796,10 @@ void Torneo::mostrarInformeFinal(Equipo **equipos, int cantidadEquipos,
              << " (" << top3->getEstadistica().getGoles() << ")\n";
 
     Equipo *maxEquipo = nullptr;
+    memoria += sizeof(Equipo*);
 
     for (int i = 0; i < cantidadEquipos; i++) {
+        iteraciones++;
         if (!equipos[i]) continue;
 
         if (!maxEquipo ||
@@ -770,10 +838,11 @@ void Torneo::simularTorneo() {
     for (int i = 0; i < cantidadGrupos; i++) {
         iteraciones++;
         grupos[i].generarPartidos();
-         memoria += sizeof(Partido) * grupos[i].getCantidadPartidos();
+        memoria += sizeof(Partido) * grupos[i].getCantidadPartidos();
     }
 
     asignarFechasGrupos();
+
     for (int g = 0; g < cantidadGrupos; g++) {
         iteraciones++;
         cout << "Partidos grupo " << grupos[g].getLetra() << endl;
@@ -790,35 +859,29 @@ void Torneo::simularTorneo() {
     }
 
     mostrarTablasGrupos();
+    dieciseisavos = generarDieciseisavos();
 
-
-    Eliminatoria dieciseisavos = generarDieciseisavos();
-
-
-    int cant16;
-    Equipo **ganadores16 = dieciseisavos.simularRonda(cant16, "DIECISEISAVOS");
-
+    ganadores16 = dieciseisavos.simularRonda(cant16, "DIECISEISAVOS");
     memoria += sizeof(Equipo*) * 32;
 
-    Eliminatoria octavos = dieciseisavos.crearSiguienteRonda(ganadores16, cant16);
+    octavos = dieciseisavos.crearSiguienteRonda(ganadores16, cant16);
 
-    int cant8;
-    Equipo **ganadores8 = octavos.simularRonda(cant8, "OCTAVOS");
-
+    ganadores8 = octavos.simularRonda(cant8, "OCTAVOS");
     memoria += sizeof(Equipo*) * 16;
 
-    Eliminatoria cuartos = octavos.crearSiguienteRonda(ganadores8, cant8);
+    cuartos = octavos.crearSiguienteRonda(ganadores8, cant8);
 
-    int cant4;
-    Equipo **ganadores4 = cuartos.simularRonda(cant4, "CUARTOS");
+    ganadores4 = cuartos.simularRonda(cant4, "CUARTOS");
     memoria += sizeof(Equipo*) * 8;
-    Eliminatoria semis = cuartos.crearSiguienteRonda(ganadores4, cant4);
 
-    int cant2;
-    Equipo **ganadores2 = semis.simularRonda(cant2, "SEMIFINAL");
+    semis = cuartos.crearSiguienteRonda(ganadores4, cant4);
+
+    ganadores2 = semis.simularRonda(cant2, "SEMIFINAL");
     memoria += sizeof(Equipo*) * 4;
-    Equipo **perdedoresSemis = new Equipo*[2];
+
+    perdedoresSemis = new Equipo*[2];
     memoria += sizeof(Equipo*) * 2;
+
     int idx = 0;
 
     for (int i = 0; i < cant4; i++) {
@@ -838,30 +901,18 @@ void Torneo::simularTorneo() {
             perdedoresSemis[idx++] = ganadores4[i];
         }
     }
-    Eliminatoria final = semis.crearSiguienteRonda(ganadores2, cant2);
 
-    int cant1;
-    Equipo **campeon = final.simularRonda(cant1, "FINAL");
+    final = semis.crearSiguienteRonda(ganadores2, cant2);
+
+    campeon = final.simularRonda(cant1, "FINAL");
     memoria += sizeof(Equipo*) * 1;
-    Equipo **perdedoresFinal = new Equipo*[1];
-    memoria += sizeof(Equipo*) * cant1;
+
+    perdedoresFinal = new Equipo*[1];
+    memoria += sizeof(Equipo*) * 1;
+
     if (ganadores2[0] == campeon[0]) {
         perdedoresFinal[0] = ganadores2[1];
     } else {
         perdedoresFinal[0] = ganadores2[0];
     }
-
-    mostrarInformeFinal(equipos, cantidadEquipos, campeon,
-                        perdedoresFinal, perdedoresSemis,
-                        ganadores16, cant16,
-                        ganadores8, cant8,
-                        ganadores4, cant4);
-    delete[] ganadores16;
-    delete[] ganadores8;
-    delete[] ganadores4;
-    delete[] ganadores2;
-    delete[] campeon;
-
-    delete[] perdedoresSemis;
-    delete[] perdedoresFinal;
 }
