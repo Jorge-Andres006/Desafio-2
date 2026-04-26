@@ -35,7 +35,49 @@ Torneo::Torneo() {
     perdedoresSemis = nullptr;
     perdedoresFinal = nullptr;
 }
+//constructor de copia
+Torneo::Torneo(const Torneo &otro) {
 
+    equipos = otro.equipos;
+    cantidadEquipos = otro.cantidadEquipos;
+
+    nombre = otro.nombre;
+    fechaInicio = otro.fechaInicio;
+    anio = otro.anio;
+
+    cantidadGrupos = otro.cantidadGrupos;
+
+    if (cantidadGrupos > 0) {
+        grupos = new Grupo[cantidadGrupos];
+        for (int i = 0; i < cantidadGrupos; i++) {
+            grupos[i] = otro.grupos[i];
+        }
+    } else {
+        grupos = nullptr;
+    }
+
+    bombo1 = nullptr;
+    bombo2 = nullptr;
+    bombo3 = nullptr;
+    bombo4 = nullptr;
+
+    dieciseisavos = otro.dieciseisavos;
+    octavos = otro.octavos;
+    cuartos = otro.cuartos;
+    semis = otro.semis;
+    final = otro.final;
+
+    ganadores16 = nullptr;
+    ganadores8 = nullptr;
+    ganadores4 = nullptr;
+    ganadores2 = nullptr;
+    campeon = nullptr;
+
+    perdedoresSemis = nullptr;
+    perdedoresFinal = nullptr;
+
+    cant16 = cant8 = cant4 = cant2 = cant1 = 0;
+}
 // destructor
 Torneo::~Torneo() {
 
@@ -451,12 +493,7 @@ void Torneo::mostrarTablasGrupos() const {
     }
 }
 
-void Torneo::obtenerClasificados(Equipo **&equiposPrimeros,
-                                 Equipo **&equiposSegundos,
-                                 Equipo **&equiposTerceros,
-                                 char *&grupoPrimeros,
-                                 char *&grupoSegundos,
-                                 char *&grupoTerceros) {
+void Torneo::obtenerClasificados(Equipo **&equiposPrimeros,Equipo **&equiposSegundos,Equipo **&equiposTerceros,char *&grupoPrimeros,char *&grupoSegundos,char *&grupoTerceros) {
 
 
     equiposPrimeros = new Equipo*[12];
